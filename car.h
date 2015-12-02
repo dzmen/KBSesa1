@@ -8,6 +8,11 @@
 class Car
 {
 	public:
+		/**
+		 * Constructs a Car
+		 * 
+		 * @param lcd The LCD to render the car on
+		 */	
 		Car(MI0283QT9 lcd);
 };
 
