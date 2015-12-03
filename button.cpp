@@ -5,15 +5,16 @@
 #include <MI0283QT9.h>
 #include <string.h>
 
-Button::Button(MI0283QT9 lcd, int x, int y, char* text)
+Button::Button(MI0283QT9 lcd, uint16_t x, uint8_t y, char* text)
 {
 	//convert a char to string
 	char textString[81];
 	strcpy(textString, text);
 	
 	//calculate the width 
-	int width = strlen(textString) * 24 + 20;
+	uint16_t width = strlen(textString) * 24 + 20;
 	
+	//draw the background of the button
 	lcd.fillRoundRect(x - 10,y - 10,width,40,10,RGB(0,128,255)); 
 	
 	//draw the text of the button
@@ -21,17 +22,19 @@ Button::Button(MI0283QT9 lcd, int x, int y, char* text)
 	
 }
 
-Button::Button(MI0283QT9 lcd, int y, char* text)
+Button::Button(MI0283QT9 lcd, uint8_t y, char* text)
 {
 	//convert a char to string
 	char textString[81];
 	strcpy(textString, text);
 	
 	//calculate the width
-	int width = strlen(textString) * 24 + 20;
+	uint16_t width = strlen(textString) * 24 + 20;
 	
-	int x = (320 - width) / 2;
+	//calculate the x coordinate so its in the center
+	uint8_t x = (320 - width) / 2;
 	
+	//draw the background of the button
 	lcd.fillRoundRect(x ,y - 10,width,40,10,RGB(0,128,255));
 	
 	//draw the text of the button
