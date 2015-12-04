@@ -16,7 +16,7 @@ class Gamefield
 		 * @param wpos X position of the road. Max 8
 		 * @note draw 40 Y pixels of the road
 		 */			
-		void DrawRoad(MI0283QT9 lcdscherm, uint8_t hpos, uint8_t wpos);
+		void MoveRoad(MI0283QT9 lcdscherm, uint8_t hpos, uint8_t dir);
 		
 		void SetTimer(MI0283QT9 lcdscherm, uint32_t time);	
 		
@@ -25,6 +25,8 @@ class Gamefield
 		void SetHS(MI0283QT9 lcdscherm, uint32_t score);
 		
 		void DrawMenu(MI0283QT9 lcd);
+		
+		void StartRoad(MI0283QT9 lcdscherm);
 		
 };
 
