@@ -7,27 +7,55 @@
 
 class Button
 {
-	public:
+	public:	
 		/**
-		 * Constructs a Button
+		 * Constructs a Button object
 		 * 
-		 * @param lcd The LCD to render the button on
 		 * @param x Begin x coordinate
 		 * @param y Begin y coordinate
 		 * @param text The text which the button displays
 		 * @note the width and height are applied automatically
 		 */		
-		Button(MI0283QT9 lcd, uint16_t x, uint8_t y, char* text);
+		Button(uint16_t x, uint8_t y, char* text);
 		
 		/**
-		 * Constructs a Button and centers it
+		 * Constructs a Button and center it
 		 * 
-		 * @param lcd The LCD to render the button on
 		 * @param y Begin y coordinate
 		 * @param text The text which the button displays
 		 * @note the width and height are applied automatically
 		 */			
-		Button(MI0283QT9 lcd, uint8_t y, char* text);
+		Button(uint8_t y, char* text);
+		
+		/**
+		 * Draw a button on the given lcd
+		 * 
+		 * @param lcd The lcd to draw the button on
+		 */	
+		void drawButton(MI0283QT9 lcd);		
+		
+		/**
+		 * Remove a button on the given lcd
+		 * 
+		 * @param lcd The lcd to remove the button from
+		 */	
+		void removeButton(MI0283QT9 lcd);
+		
+		/**
+		 * Check of the given x and y are in range of the coordinates of the button
+		 *
+		 * @param x Begin x coordinate
+		 * @param y Begin y coordinate
+		 * @return a 0 or 1
+		 */	
+		uint8_t isPressed(uint16_t x, uint8_t y);	
+						
+		private:
+			uint16_t x;
+			uint8_t y;
+			uint16_t width;
+			uint8_t height;
+			char text_string[81];
 		
 };
 
