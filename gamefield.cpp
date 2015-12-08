@@ -1,21 +1,17 @@
 #include "gamefield.h"
+#include <Arduino.h>
 #include <GraphicsLib.h>
 #include <MI0283QT9.h>
 
-uint8_t pos[] = {4,4,4,4,4,4};
-	
-//ROAD HAS 9 POS LEFT/RIGHT
-//ROAD HAS 6 POS UP.DOWN
-
 void Gamefield::StartRoad(MI0283QT9 lcdscherm)
-{ 
+{
 	lcdscherm.fillRect(0, 0, 100, 240, RGB(100, 240, 20));
 	lcdscherm.fillRect(100, 0, 10, 240, RGB(240, 100, 20));
 	lcdscherm.fillRect(110, 0, 120, 240, RGB(160, 160, 160));
 	lcdscherm.fillRect(230, 0, 10, 240, RGB(240, 100, 20));
 	lcdscherm.fillRect(240, 0, 80, 240, RGB(100, 240, 20));
 }
-//dir, true is right, false is left
+
 void Gamefield::MoveRoad(MI0283QT9 lcdscherm, uint8_t hpos, uint8_t dir)
 {
 	if(dir){
@@ -25,7 +21,7 @@ void Gamefield::MoveRoad(MI0283QT9 lcdscherm, uint8_t hpos, uint8_t dir)
 		lcdscherm.fillRect(wpos * 20 + 150, hpos * 40, 20, 40, RGB(160, 160, 160));
 		lcdscherm.fillRect(wpos * 20 + 170, hpos * 40, 10, 40, RGB(240, 100, 20));
 		pos[hpos]++;
-	}else{
+		}else{
 		int wpos = pos[hpos];
 		lcdscherm.fillRect(wpos * 20 , hpos * 40, 10, 40, RGB(240, 100, 20));
 		lcdscherm.fillRect(wpos * 20 + 10, hpos * 40, 20, 40, RGB(160, 160, 160));
@@ -35,9 +31,37 @@ void Gamefield::MoveRoad(MI0283QT9 lcdscherm, uint8_t hpos, uint8_t dir)
 	}
 }
 
-void Gamefield::SetTimer(MI0283QT9 lcdscherm, uint32_t time)
+void Gamefield::Generate(MI0283QT9 lcdscherm)
 {
-	lcdscherm.drawInteger(8, 8, time, DEC, RGB(0,0,0), RGB(100, 240, 20), 1);
+	if (newpos == 100 || newpos == pos[0])
+	{
+		newpos = random(0, 8);
+	}
+	uint8_t vorigepos = 100;
+	for (int i = 0; i < 6; i++)
+	{
+		if (vorigepos == 100)
+		{
+			vorigepos = newpos;
+		}
+
+		if (vorigepos > pos[i])
+		{
+			MoveRoad(lcdscherm, i, 1);
+			vorigepos = pos[i]-1;
+		}else if (vorigepos < pos[i])
+		{
+			MoveRoad(lcdscherm, i, 0);
+			vorigepos = pos[i]+1;
+		}
+	}
+	lcdscherm.drawInteger(8, 8, timer, DEC, RGB(0,0,0), RGB(100, 240, 20), 1|0x00);
+	DrawMenu(lcdscherm);
+}
+
+void Gamefield::SetTimer(uint32_t timing)
+{
+	timer = timing;
 }
 
 void Gamefield::DrawHS(MI0283QT9 lcdscherm)
