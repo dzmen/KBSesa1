@@ -34,14 +34,6 @@ class Gamefield
 		void SetHS(MI0283QT9 lcdscherm, uint32_t score);
 		
 		/**
-		 * Function DrawMenu
-		 * 
-		 * @param lcdscherm The LCD to render the road on
-		 * @note draws the menu button
-		 */	
-		void DrawMenu(MI0283QT9 lcd);
-		
-		/**
 		 * Function StartRoad
 		 * 
 		 * @param lcdscherm The LCD to render the road on
@@ -52,7 +44,6 @@ class Gamefield
 		uint8_t pos[6] = {4,4,4,4,4,4};
 		uint8_t newpos = 100;
 		uint32_t timer = 0;
-		uint8_t chight = 0;
 		/**
 		 * Function MoveRoad
 		 * 

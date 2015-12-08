@@ -56,7 +56,6 @@ void Gamefield::Generate(MI0283QT9 lcdscherm)
 		}
 	}
 	lcdscherm.drawInteger(8, 8, timer, DEC, RGB(0,0,0), RGB(100, 240, 20), 1|0x00);
-	DrawMenu(lcdscherm);
 }
 
 void Gamefield::SetTimer(uint32_t timing)
@@ -72,10 +71,4 @@ void Gamefield::DrawHS(MI0283QT9 lcdscherm)
 void Gamefield::SetHS(MI0283QT9 lcdscherm, uint32_t score)
 {
 	lcdscherm.drawInteger(290, 25, score, DEC, RGB(0,0,0) , RGB(100, 240, 20), 1);
-}
-
-void Gamefield::DrawMenu(MI0283QT9 lcd)
-{
-	lcd.fillRoundRect(250, 190, 50, 25,5,RGB(0,128,255));
-	lcd.drawText(260,200,"MENU", RGB(255,255,255),RGB(0,128,255),1);
 }
