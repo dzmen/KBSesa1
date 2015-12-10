@@ -48,11 +48,11 @@ int main()
 		
 	Car testauto = Car(lcd);
 	
-	Gamefield veld;
-	veld.StartRoad(lcd);
+	Gamefield veld = Gamefield(lcd);
+	veld.StartRoad();
 	veld.SetTimer(0);
-	veld.SetHS(lcd, 1000);
-	veld.DrawHS(lcd);
+	veld.SetHS(1000);
+	veld.DrawHS();
 	Car testautotje = Car(lcd);
 	uint8_t pos = 4;
 	uint8_t dir = 1;
@@ -60,7 +60,7 @@ int main()
 	{
 			if (changeroad)
 			{
-				veld.Generate(lcd);
+				veld.Generate();
 				changeroad = 0;
 			}
 			veld.SetTimer(seconden);
