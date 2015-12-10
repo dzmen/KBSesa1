@@ -15,11 +15,12 @@ class Car
 		 * @param lcd The LCD to render the car on
 		 */	
 		Car(MI0283QT9 lcd);
-		void Refresh(MI0283QT9 lcd, ArduinoNunchuk nunchuk, Car testauto);
+		void Refresh(ArduinoNunchuk nunchuk);
 	private:
-		void Left(MI0283QT9 lcd, uint16_t xL, uint8_t widthL);
-		void Right(MI0283QT9 lcd, uint16_t xR, uint8_t widthR);
+		void Left(uint16_t xL, uint8_t widthL);
+		void Right(uint16_t xR, uint8_t widthR);
 		
+		MI0283QT9 * lcdscherm;
 		uint16_t xL;
 		uint16_t xR;
 		uint8_t widthL;
