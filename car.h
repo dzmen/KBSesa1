@@ -15,16 +15,31 @@ class Car
 		 * @param lcd The LCD to render the car on
 		 */	
 		Car(MI0283QT9 lcd);
-		void Refresh(ArduinoNunchuk nunchuk);
-	private:
-		void Left(uint16_t xL, uint8_t widthL);
-		void Right(uint16_t xR, uint8_t widthR);
 		
+		/**
+		 * Constructs a Car
+		 * 
+		 * @param nunchuk Used to get nunchuk values
+		 */	
+		void Refresh(ArduinoNunchuk nunchuk);
+		
+	private:
 		MI0283QT9 * lcdscherm;
-		uint16_t xL;
-		uint16_t xR;
-		uint8_t widthL;
-		uint8_t widthR;
+		uint16_t x;
+		
+		/**
+		 * Moves the car to the left
+		 * 
+		 * @param width The amount of pixels the car has to move
+		 */	
+		void Left(uint8_t width);
+		
+		/**
+		 * Moves the car to the right
+		 * 
+		 * @param width The amount of pixels the car has to move
+		 */	
+		void Right(uint8_t width);
 };
 
 
