@@ -31,14 +31,6 @@ class Gamefield
 		void SetTimer(uint32_t timer);	
 		
 		/**
-		 * Function DrawHS
-		 * 
-		 * @param lcdscherm The LCD to render the road on
-		 * @note draws the text "HIGHSCORE"
-		 */	
-		void DrawHS();
-		
-		/**
 		 * Function SetHS
 		 * 
 		 * @param lcdscherm, The LCD to render the road on
@@ -54,7 +46,7 @@ class Gamefield
 		 */	
 		void StartRoad();
 	private:
-		uint8_t pos[6] = {4,4,4,4,4,4};
+		uint8_t pos[6] = {8,8,8,8,8,8};
 		uint8_t newpos = 100;
 		uint32_t timer = 0;
 		MI0283QT9 * lcdscherm;
