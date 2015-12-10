@@ -30,16 +30,16 @@ class Button
 		/**
 		 * Draw a button on the given lcd
 		 * 
-		 * @param lcd The lcd to draw the button on
+		 * @param lcd_p A pointer to a lcd to draw the button on
 		 */	
-		void drawButton(MI0283QT9 lcd);		
+		void drawButton(MI0283QT9 *lcd_p);		
 		
 		/**
 		 * Remove a button on the given lcd
 		 * 
-		 * @param lcd The lcd to remove the button from
+		 * @param lcd_p A pointer to a a lcd to remove the button from
 		 */	
-		void removeButton(MI0283QT9 lcd);
+		void removeButton(MI0283QT9 *lcd_p);
 		
 		/**
 		 * Check of the given x and y are in range of the coordinates of the button
@@ -59,6 +59,4 @@ class Button
 		
 };
 
-
 #endif
-

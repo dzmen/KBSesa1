@@ -12,9 +12,9 @@ class Game
 		/**
 		 * Constructs a Game object
 		 * 
-		 * @param lcd The lcd to render the game elements on
+		 * @param lcd_p A pointer to a lcd to render the game elements on
 		 */	
-		Game(MI0283QT9 lcd);	
+		Game(MI0283QT9 *lcd_p);	
 		
 		/**
 		 * Runs the game object
@@ -35,7 +35,7 @@ class Game
 		void removeLastTouch();
 	
 	private:
-		MI0283QT9 lcd;
+		MI0283QT9 *lcd;
 		uint8_t main_screen;
 		uint8_t start_game;
 		uint8_t highcore_screen;
@@ -47,4 +47,3 @@ class Game
 };
 
 #endif
-
