@@ -53,7 +53,6 @@ void Car::Refresh(ArduinoNunchuk nunchuk)
 	{
 		Straight();
 	}
-	/*
 	else if (nunchuk.analogX > 140 && nunchuk.analogX <= 160)
 	{
 		Right(2);
@@ -74,7 +73,6 @@ void Car::Refresh(ArduinoNunchuk nunchuk)
 	{
 		Right(10);
 	}
-	*/
 }
 
 void Car::Straight()
@@ -138,10 +136,10 @@ void Car::Right(uint8_t width)
 	lcdscherm->fillRect(x - 10 - width, 165, width, 60, RGB(160,160,160));
 	
 	//Wheels
-	lcdscherm->fillRect(x - 20, 175, width, 15, RGB(0,0,0)); //left front
-	lcdscherm->fillRect(x - 20, 205, width, 15, RGB(0,0,0)); //left rear
-	lcdscherm->fillRect(x + 10, 175, width, 15, RGB(0,0,0)); //right front
-	lcdscherm->fillRect(x + 10, 205, width, 15, RGB(0,0,0)); //right rear
+	lcdscherm->fillRect(x - 10 - width, 175, width, 15, RGB(0,0,0)); //left front
+	lcdscherm->fillRect(x - 10 - width, 205, width, 15, RGB(0,0,0)); //left rear
+	lcdscherm->fillRect(x + 20 - width, 175, width, 15, RGB(0,0,0)); //right front
+	lcdscherm->fillRect(x + 20 - width, 205, width, 15, RGB(0,0,0)); //right rear
 	
 	//Road
 	lcdscherm->fillRect(x - 20 - width, 175, width, 15, RGB(160,160,160));
