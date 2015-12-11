@@ -27,6 +27,7 @@ class Car
 		MI0283QT9 * lcdscherm;
 		uint16_t x;
 		
+		void Straight();
 		/**
 		 * Moves the car to the left
 		 * 
