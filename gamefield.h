@@ -9,17 +9,16 @@ class Gamefield
 {
 	public:	
 		/**
-		 * Function SetTimer
+		 * Function Init
 		 * 
-		 * @param timer The time you are playing
-		 * @note Set the timer in the game
+		 * @param lcd The lcd screen driver
+		 * @note Binds the lcd screen to the class
 		 */	
 		void Init(MI0283QT9 lcd);
 		/**
-		 * Function SetTimer
+		 * Function Generate
 		 * 
-		 * @param timer The time you are playing
-		 * @note Set the timer in the game
+		 * @note Generate the random road
 		 */			
 		void Generate();
 		/**
@@ -33,7 +32,6 @@ class Gamefield
 		/**
 		 * Function SetHS
 		 * 
-		 * @param lcdscherm, The LCD to render the road on
 		 * @param score, The highscore at the moment
 		 */	
 		void SetHS(uint32_t score);
@@ -41,10 +39,15 @@ class Gamefield
 		/**
 		 * Function StartRoad
 		 * 
-		 * @param lcdscherm The LCD to render the road on
 		 * @note draws the start road of the game
 		 */	
 		void StartRoad();
+		
+		/**
+		 * Function GetPos
+		 * 
+		 * @note get the position of the road
+		 */	
 		
 		uint8_t * GetPos();
 	private:
@@ -55,10 +58,9 @@ class Gamefield
 		/**
 		 * Function MoveRoad
 		 * 
-		 * @param lcdscherm The LCD to render the road on
 		 * @param hpos Y position of the road. Max 5
 		 * @param dir gives the direction of change. 1 is right, 0 is left
-		 * @note draw 40 Y pixels of the road and 20 X on both side of the road
+		 * @note draw 40 Y pixels of the road and 10 X on both side of the road
 		 */			
 		void MoveRoad(uint8_t hpos, uint8_t dir);
 };
