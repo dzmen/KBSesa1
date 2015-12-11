@@ -45,6 +45,8 @@ class Gamefield
 		 * @note draws the start road of the game
 		 */	
 		void StartRoad();
+		
+		uint8_t * GetPos();
 	private:
 		uint8_t pos[6] = {8,8,8,8,8,8};
 		uint8_t newpos = 100;

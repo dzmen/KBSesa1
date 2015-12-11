@@ -22,19 +22,24 @@ void Gamefield::MoveRoad(uint8_t hpos, uint8_t dir)
 	uint8_t wlength = 10;
 	if(dir){
 		int wpos = pos[hpos];
-		lcdscherm->fillRect(wpos * wlength + wlength, hpos * 40, wlength, 40, RGB(100, 240, 20));  //draw green
-		lcdscherm->fillRect(wpos * wlength + wlength + 10, hpos * 40, 10, 40, RGB(240, 100, 20));  //draw orange
-		lcdscherm->fillRect(wpos * wlength + wlength + 130, hpos * 40, wlength, 40, RGB(160, 160, 160));//draw gray GOOD
-		lcdscherm->fillRect(wpos * wlength + wlength + 140, hpos * 40, 10, 40, RGB(240, 100, 20)); //draw orange
+		lcdscherm->fillRect(wpos * wlength + wlength, hpos * 40, wlength, 40, RGB(100, 240, 20));
+		lcdscherm->fillRect(wpos * wlength + wlength + 10, hpos * 40, 10, 40, RGB(240, 100, 20));
+		lcdscherm->fillRect(wpos * wlength + wlength + 130, hpos * 40, wlength, 40, RGB(160, 160, 160));
+		lcdscherm->fillRect(wpos * wlength + wlength + 140, hpos * 40, 10, 40, RGB(240, 100, 20));
 		pos[hpos]++;
 		}else{
 		int wpos = pos[hpos];
 		lcdscherm->fillRect(wpos * wlength , hpos * 40, 10, 40, RGB(240, 100, 20));
-		lcdscherm->fillRect(wpos * wlength + 10, hpos * 40, 20, 40, RGB(160, 160, 160));
+		lcdscherm->fillRect(wpos * wlength + 10, hpos * 40, 10, 40, RGB(160, 160, 160));
 		lcdscherm->fillRect(wpos * wlength + 130, hpos * 40, 10, 40, RGB(240, 100, 20));
-		lcdscherm->fillRect(wpos * wlength + 140, hpos * 40, 20, 40, RGB(100, 240, 20));
+		lcdscherm->fillRect(wpos * wlength + 140, hpos * 40, 10, 40, RGB(100, 240, 20));
 		pos[hpos]--;
 	}
+}
+
+uint8_t * Gamefield::GetPos()
+{
+	return pos;
 }
 
 void Gamefield::Generate()

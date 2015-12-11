@@ -23,6 +23,8 @@ class Car
 		 */	
 		void Refresh(ArduinoNunchuk nunchuk);
 		
+		uint16_t GetPos();
+		
 	private:
 		MI0283QT9 * lcdscherm;
 		uint16_t x;

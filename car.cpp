@@ -45,15 +45,16 @@ void Car::Refresh(ArduinoNunchuk nunchuk)
 	{
 		Left(4);
 	}
-	else if (nunchuk.analogX > 90 && nunchuk.analogX <= 110)
+	else if (nunchuk.analogX > 90 && nunchuk.analogX <= 100)
 	{
 		Left(2);
 	}
-	else if (nunchuk.analogX > 110 && nunchuk.analogX <= 140)
+	else if (nunchuk.analogX > 100 && nunchuk.analogX <= 150)
 	{
 		Straight();
 	}
-	else if (nunchuk.analogX > 140 && nunchuk.analogX <= 160)
+	
+	else if (nunchuk.analogX > 150 && nunchuk.analogX <= 160)
 	{
 		Right(2);
 	}
@@ -73,6 +74,12 @@ void Car::Refresh(ArduinoNunchuk nunchuk)
 	{
 		Right(10);
 	}
+	
+}
+
+uint16_t Car::GetPos()
+{
+	return x;
 }
 
 void Car::Straight()
