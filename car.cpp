@@ -5,7 +5,7 @@
 #include "ArduinoNunchuk.h"
 #include "car.h"
 
-Car::Car(MI0283QT9 lcd)
+void Car::Init(MI0283QT9 lcd)
 {
 	lcdscherm = &lcd;
 	

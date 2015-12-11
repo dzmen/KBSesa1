@@ -14,7 +14,7 @@ class Gamefield
 		 * @param timer The time you are playing
 		 * @note Set the timer in the game
 		 */	
-		Gamefield(MI0283QT9 lcd);
+		void Init(MI0283QT9 lcd);
 		/**
 		 * Function SetTimer
 		 * 

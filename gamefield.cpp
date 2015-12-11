@@ -3,7 +3,7 @@
 #include <GraphicsLib.h>
 #include <MI0283QT9.h>
 
-Gamefield::Gamefield(MI0283QT9 lcd)
+void Gamefield::Init(MI0283QT9 lcd)
 {
 	lcdscherm = &lcd;
 }
@@ -61,8 +61,8 @@ void Gamefield::Generate()
 			vorigepos = pos[i]+1;
 		}
 	}
-	lcdscherm->drawInteger(8, 8, timer, DEC, RGB(0,0,0), RGB(100, 240, 20), 1|0x00);
-	lcdscherm->drawText(240, 8, "HIGHSCORE:", RGB(0,0,0) , RGB(100, 240, 20), 1|0x00);
+	lcdscherm->drawInteger(8, 8, timer, DEC, RGB(0,0,0), RGB(100, 240, 20), 1||0x00);
+	lcdscherm->drawText(240, 8, "HIGHSCORE:", RGB(0,0,0) , RGB(100, 240, 20), 1||0x00);
 }
 
 void Gamefield::SetTimer(uint32_t timing)
