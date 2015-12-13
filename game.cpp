@@ -6,7 +6,7 @@
 #include <MI0283QT9.h>
 #include "button.h"
 
-Game::Game(MI0283QT9 *lcd_p)
+void Game::Init(MI0283QT9 *lcd_p)
 {
 	lcd = lcd_p;
 	main_screen = 1;
