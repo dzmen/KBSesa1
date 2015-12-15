@@ -3,9 +3,9 @@
 #include <GraphicsLib.h>
 #include <MI0283QT9.h>
 
-void Gamefield::Init(MI0283QT9 lcd)
+void Gamefield::Init(MI0283QT9 * lcd)
 {
-	lcdscherm = &lcd;
+	lcdscherm = lcd;
 }
 
 void Gamefield::StartRoad()

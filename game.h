@@ -4,6 +4,9 @@
 #define _GAME_h
 
 #include <MI0283QT9.h>
+#include "ArduinoNunchuk.h"
+#include "gamefield.h"
+#include "car.h"
 
 class Game
 {
@@ -44,6 +47,9 @@ class Game
 		uint16_t touch_x;
 		uint16_t touch_y;
 		
+		Gamefield veld;
+		Car autotje;
+		ArduinoNunchuk nunchuk;
 };
 
 #endif

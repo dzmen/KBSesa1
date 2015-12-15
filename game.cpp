@@ -5,6 +5,9 @@
 #include "game.h"
 #include <MI0283QT9.h>
 #include "button.h"
+#include "ArduinoNunchuk.h"
+#include "gamefield.h"
+#include "car.h"
 
 void Game::Init(MI0283QT9 lcd_p)
 {
@@ -76,17 +79,28 @@ void Game::run()
 		Button back = Button(0,10, "back");
 		back.drawButton(lcd);
 		
+		nunchuk = ArduinoNunchuk();
+		nunchuk.init();
+		veld.Init(lcd);
+		veld.StartRoad();
+		veld.SetTimer(0);
+		veld.SetHS(1000);
+		autotje.Init(lcd);
+		
 		while(start_game)
 		{
 			updateTouch();
+
+			veld.Generate();
+			autotje.Refresh(nunchuk);
 			
-			if (back.isPressed(touch_x, touch_y))
-			{
-				back.removeButton(lcd);
-				removeLastTouch();
-				start_game = 0;
-				main_screen = 1;
-			}
+			//if (back.isPressed(touch_x, touch_y))
+			//{
+			//	back.removeButton(lcd);
+			//	removeLastTouch();
+			//	start_game = 0;
+			//	main_screen = 1;
+			//}
 		}
 	}
 	/**

@@ -14,7 +14,7 @@ class Gamefield
 		 * @param lcd The lcd screen driver
 		 * @note Binds the lcd screen to the class
 		 */	
-		void Init(MI0283QT9 lcd);
+		void Init(MI0283QT9 * lcd);
 		/**
 		 * Function Generate
 		 * 

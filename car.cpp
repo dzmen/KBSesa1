@@ -5,9 +5,9 @@
 #include "ArduinoNunchuk.h"
 #include "car.h"
 
-void Car::Init(MI0283QT9 lcd)
+void Car::Init(MI0283QT9 *lcd)
 {
-	lcdscherm = &lcd;
+	lcdscherm = lcd;
 	
 	//Starting position of the car
 	x = 180;

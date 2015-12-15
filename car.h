@@ -14,7 +14,7 @@ class Car
 		 * 
 		 * @param lcd The LCD to render the car on
 		 */	
-		void Init(MI0283QT9 lcd);
+		void Init(MI0283QT9 *lcd);
 		
 		/**
 		 * Constructs a Car
