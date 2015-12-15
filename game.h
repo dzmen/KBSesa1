@@ -14,7 +14,7 @@ class Game
 		 * 
 		 * @param lcd_p A pointer to a lcd to render the game elements on
 		 */	
-		void Init(MI0283QT9 *lcd_p);	
+		void Init(MI0283QT9 lcd_p);	
 		
 		/**
 		 * Runs the game object

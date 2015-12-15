@@ -5,10 +5,10 @@
 #include <MI0283QT9.h>
 #include <string.h>
 
-Button::Button(uint16_t x, uint8_t y, char* text)
+Button::Button(uint16_t xin, uint8_t yin, char* text)
 {
-	y = y;
-	x = x;
+	y = yin;
+	x = xin;
 	height = 40;
 	
 	//convert a char to string
@@ -18,9 +18,9 @@ Button::Button(uint16_t x, uint8_t y, char* text)
 	width = strlen(text_string) * 24 + 20;		
 }
 
-Button::Button(uint8_t y, char* text)
+Button::Button(uint8_t yin, char* text)
 {
-	y = y;
+	y = yin;
 	height = 40;
 	
 	//convert a char to string
@@ -48,13 +48,13 @@ void Button::removeButton(MI0283QT9 *lcd_p)
 	lcd_p->fillRoundRect(x , y - 10, width, height, 10, RGB(153,204,255));	
 }
 
-uint8_t Button::isPressed(uint16_t x, uint8_t y)
+uint8_t Button::isPressed(uint16_t xin, uint8_t yin)
 {
 	uint16_t xend = x + width;
 	uint8_t yend = y - 10 + height;
 	
 	//check if the x and y vars are between the x and y range of the button	
-	if ((y >= y - 10 && y <= yend) && (x >= x && x <= xend))
+	if ((yin >= y - 10 && yin <= yend) && (xin >= x && xin <= xend))
 	{
 		return 1;		
 	} 
