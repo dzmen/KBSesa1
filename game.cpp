@@ -129,16 +129,29 @@ void Game::run()
 	*/	
 	else if(help_screen)
 	{
-		Button back = Button(100, "back");
+		Button back = Button(200, "back");
 		back.drawButton(lcd);
-		
-		
+		lcd->drawText(20,40,"GoFast is een racegame met als doel",RGB(255,255,255),RGB(153,204,255),1);
+			lcd->drawText(20,50,"zo lang mogelijk op de baan te ",RGB(255,255,255),RGB(153,204,255),1);
+			lcd->drawText(20,60,"blijven. Als de auto op de rode",RGB(255,255,255),RGB(153,204,255),1);
+			lcd->drawText(20,70,"strook komt dan ben je af. De auto",RGB(255,255,255),RGB(153,204,255),1);
+			lcd->drawText(20,80,"die je bestuurd gaat steeds sneller",RGB(255,255,255),RGB(153,204,255),1);
+			lcd->drawText(20,90,"rijden waardoor het spel steeds",RGB(255,255,255),RGB(153,204,255),1);
+			lcd->drawText(20,100,"moeilijker wordt. Hoe langer je het",RGB(255,255,255),RGB(153,204,255),1);
+			lcd->drawText(20,110,"vol houdt, hoe hoger je score is.",RGB(255,255,255),RGB(153,204,255),1);
+			lcd->drawText(20,120,"De drie hoogste scores worden",RGB(255,255,255),RGB(153,204,255),1);
+			lcd->drawText(20,130,"opgeslagen in de Highscore lijst. Je ",RGB(255,255,255),RGB(153,204,255),1);
+		    lcd->drawText(20,140,"bestuurt het spel met de joystick,",RGB(255,255,255),RGB(153,204,255),1);
+			lcd->drawText(20,150,"hiermee kun je de auto hard of",RGB(255,255,255),RGB(153,204,255),1);
+			lcd->drawText(20,160,"zacht naar links of rechts",RGB(255,255,255),RGB(153,204,255),1);
+			lcd->drawText(20,170,"laten rijden. ",RGB(255,255,255),RGB(153,204,255),1);
 		while(help_screen)
 		{
 			updateTouch();
 			
 			if (back.isPressed(touch_x, touch_y))
 			{
+				lcd->fillScreen(RGB(153,204,255));	
 				back.removeButton(lcd);
 				removeLastTouch();
 				help_screen = 0;
