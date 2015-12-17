@@ -5,6 +5,10 @@
 #include <MI0283QT9.h>
 #include <string.h>
 
+#define WHITE RGB(255,255,255)
+#define LIGHT_BLUE RGB(153,204,255)
+#define DARK_BLUE RGB(0,128,255)
+
 Button::Button(uint16_t xin, uint8_t yin, char* text)
 {
 	y = yin;
@@ -36,16 +40,16 @@ Button::Button(uint8_t yin, char* text)
 void Button::drawButton(MI0283QT9 *lcd_p)
 {
 	//draw the background of the button
-	lcd_p->fillRoundRect(x , y - 10, width, height, 10, RGB(0,128,255));
+	lcd_p->fillRoundRect(x , y - 10, width, height, 10, DARK_BLUE);
 	
 	//draw the text of the button
-	lcd_p->drawText(x + 10, y, text_string, RGB(255,255,255), RGB(0,128,255),3);
+	lcd_p->drawText(x + 10, y, text_string, WHITE, DARK_BLUE,3);
 }
 
 void Button::removeButton(MI0283QT9 *lcd_p)
 {
 	//draw the background of the button
-	lcd_p->fillRoundRect(x , y - 10, width, height, 10, RGB(153,204,255));	
+	lcd_p->fillRoundRect(x , y - 10, width, height, 10, LIGHT_BLUE);	
 }
 
 uint8_t Button::isPressed(uint16_t xin, uint8_t yin)

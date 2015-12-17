@@ -9,6 +9,10 @@
 #include "gamefield.h"
 #include "car.h"
 
+#define WHITE RGB(255,255,255)
+#define LIGHT_BLUE RGB(153,204,255)
+#define DARK_BLUE RGB(0,128,255)
+
 void Game::Init(MI0283QT9 lcd_p)
 {
 	lcd = &lcd_p;
@@ -16,7 +20,6 @@ void Game::Init(MI0283QT9 lcd_p)
 	start_game = 0;
 	highcore_screen = 0;
 	help_screen = 0;	
-	lcd->fillScreen(RGB(153,204,255));	
 }
 
 void Game::run()
@@ -27,6 +30,7 @@ void Game::run()
 	*/	
 	if(main_screen)
 	{
+		lcd->fillScreen(LIGHT_BLUE);	
 		Button start = Button(40, "Start");
 		Button highscores = Button(100, "Highscores");
 		Button help = Button(160, "Help");
@@ -36,7 +40,8 @@ void Game::run()
 		help.drawButton(lcd);
 		
 		while(main_screen)
-		{
+		{			
+			
 			updateTouch();
 			
 			if (start.isPressed(touch_x, touch_y))
@@ -68,17 +73,14 @@ void Game::run()
 				main_screen = 0;
 				help_screen = 1;
 				
-			}
+			}			
 		}
 	}
 	/**
 	* Run the game
 	*/	
 	else if(start_game)
-	{
-		Button back = Button(0,10, "back");
-		back.drawButton(lcd);
-		
+	{		
 		nunchuk = ArduinoNunchuk();
 		nunchuk.init();
 		veld.Init(lcd);
@@ -89,18 +91,14 @@ void Game::run()
 		
 		while(start_game)
 		{
-			updateTouch();
-
 			veld.Generate();
 			autotje.Refresh(nunchuk);
 			
-			//if (back.isPressed(touch_x, touch_y))
-			//{
-			//	back.removeButton(lcd);
-			//	removeLastTouch();
-			//	start_game = 0;
-			//	main_screen = 1;
-			//}
+			if (nunchuk.cButton)
+			{
+				start_game = 0;
+				main_screen = 1;
+			}
 		}
 	}
 	/**
@@ -108,16 +106,27 @@ void Game::run()
 	*/	
 	else if(highcore_screen)
 	{
-		Button back = Button(0,10, "back");
-		back.drawButton(lcd);		
+		Button back = Button(200, "back");
+		back.drawButton(lcd);	
 		
+		lcd->drawChar(20,20,'1',WHITE, LIGHT_BLUE, 3);
+		lcd->drawChar(20,50,'2',WHITE, LIGHT_BLUE, 3);
+		lcd->drawChar(20,80,'3',WHITE, LIGHT_BLUE, 3);
+		
+		lcd->drawText(60,20,"Wilco",WHITE,LIGHT_BLUE, 3);
+		lcd->drawText(60,50,"Jann",WHITE,LIGHT_BLUE, 3);
+		lcd->drawText(60,80,"Jan",WHITE,LIGHT_BLUE, 3);
+		
+		lcd->drawInteger(200,20,200,DEC, WHITE,LIGHT_BLUE, 3);
+		lcd->drawInteger(200,50,182,DEC, WHITE,LIGHT_BLUE, 3);
+		lcd->drawInteger(200,80,20,DEC, WHITE,LIGHT_BLUE, 3);
+				
 		while(highcore_screen)
 		{
 			updateTouch();
 			
 			if (back.isPressed(touch_x, touch_y))
-			{
-				back.removeButton(lcd);							
+			{						
 				removeLastTouch();
 				highcore_screen = 0;
 				main_screen = 1;			
@@ -131,28 +140,27 @@ void Game::run()
 	{
 		Button back = Button(200, "back");
 		back.drawButton(lcd);
-		lcd->drawText(20,40,"GoFast is een racegame met als doel",RGB(255,255,255),RGB(153,204,255),1);
-			lcd->drawText(20,50,"zo lang mogelijk op de baan te ",RGB(255,255,255),RGB(153,204,255),1);
-			lcd->drawText(20,60,"blijven. Als de auto op de rode",RGB(255,255,255),RGB(153,204,255),1);
-			lcd->drawText(20,70,"strook komt dan ben je af. De auto",RGB(255,255,255),RGB(153,204,255),1);
-			lcd->drawText(20,80,"die je bestuurd gaat steeds sneller",RGB(255,255,255),RGB(153,204,255),1);
-			lcd->drawText(20,90,"rijden waardoor het spel steeds",RGB(255,255,255),RGB(153,204,255),1);
-			lcd->drawText(20,100,"moeilijker wordt. Hoe langer je het",RGB(255,255,255),RGB(153,204,255),1);
-			lcd->drawText(20,110,"vol houdt, hoe hoger je score is.",RGB(255,255,255),RGB(153,204,255),1);
-			lcd->drawText(20,120,"De drie hoogste scores worden",RGB(255,255,255),RGB(153,204,255),1);
-			lcd->drawText(20,130,"opgeslagen in de Highscore lijst. Je ",RGB(255,255,255),RGB(153,204,255),1);
-		    lcd->drawText(20,140,"bestuurt het spel met de joystick,",RGB(255,255,255),RGB(153,204,255),1);
-			lcd->drawText(20,150,"hiermee kun je de auto hard of",RGB(255,255,255),RGB(153,204,255),1);
-			lcd->drawText(20,160,"zacht naar links of rechts",RGB(255,255,255),RGB(153,204,255),1);
-			lcd->drawText(20,170,"laten rijden. ",RGB(255,255,255),RGB(153,204,255),1);
+		lcd->drawText(20,40,"GoFast is een racegame met als doel",WHITE,LIGHT_BLUE,1);
+		lcd->drawText(20,50,"zo lang mogelijk op de baan te ",WHITE,LIGHT_BLUE,1);
+		lcd->drawText(20,60,"blijven. Als de auto op de rode",WHITE,LIGHT_BLUE,1);
+		lcd->drawText(20,70,"strook komt dan ben je af. De auto",WHITE,LIGHT_BLUE,1);
+		lcd->drawText(20,80,"die je bestuurd gaat steeds sneller",WHITE,LIGHT_BLUE,1);
+		lcd->drawText(20,90,"rijden waardoor het spel steeds",WHITE,LIGHT_BLUE,1);
+		lcd->drawText(20,100,"moeilijker wordt. Hoe langer je het",WHITE,LIGHT_BLUE,1);
+		lcd->drawText(20,110,"vol houdt, hoe hoger je score is.",WHITE,LIGHT_BLUE,1);
+		lcd->drawText(20,120,"De drie hoogste scores worden",WHITE,LIGHT_BLUE,1);
+		lcd->drawText(20,130,"opgeslagen in de Highscore lijst. Je ",WHITE,LIGHT_BLUE,1);
+		lcd->drawText(20,140,"bestuurt het spel met de joystick,",WHITE,LIGHT_BLUE,1);
+		lcd->drawText(20,150,"hiermee kun je de auto hard of",WHITE,LIGHT_BLUE,1);
+		lcd->drawText(20,160,"zacht naar links of rechts",WHITE,LIGHT_BLUE,1);
+		lcd->drawText(20,170,"laten rijden. ",WHITE,LIGHT_BLUE,1);
+		
 		while(help_screen)
 		{
 			updateTouch();
 			
 			if (back.isPressed(touch_x, touch_y))
 			{
-				lcd->fillScreen(RGB(153,204,255));	
-				back.removeButton(lcd);
 				removeLastTouch();
 				help_screen = 0;
 				main_screen = 1;
@@ -170,6 +178,8 @@ void Game::updateTouch()
 
 void Game::removeLastTouch()
 {
-	touch_x = 1000;
-	touch_y = 1000;
+	lcd->lcd_x = 0;
+	lcd->lcd_y = 0;
+	touch_x = 0;
+	touch_y = 0;
 }
