@@ -140,20 +140,16 @@ void Game::run()
 	{
 		Button back = Button(200, "back");
 		back.drawButton(lcd);
-		lcd->drawText(20,40,"GoFast is een racegame met als doel",WHITE,LIGHT_BLUE,1);
-		lcd->drawText(20,50,"zo lang mogelijk op de baan te ",WHITE,LIGHT_BLUE,1);
-		lcd->drawText(20,60,"blijven. Als de auto op de rode",WHITE,LIGHT_BLUE,1);
-		lcd->drawText(20,70,"strook komt dan ben je af. De auto",WHITE,LIGHT_BLUE,1);
-		lcd->drawText(20,80,"die je bestuurd gaat steeds sneller",WHITE,LIGHT_BLUE,1);
-		lcd->drawText(20,90,"rijden waardoor het spel steeds",WHITE,LIGHT_BLUE,1);
-		lcd->drawText(20,100,"moeilijker wordt. Hoe langer je het",WHITE,LIGHT_BLUE,1);
-		lcd->drawText(20,110,"vol houdt, hoe hoger je score is.",WHITE,LIGHT_BLUE,1);
-		lcd->drawText(20,120,"De drie hoogste scores worden",WHITE,LIGHT_BLUE,1);
-		lcd->drawText(20,130,"opgeslagen in de Highscore lijst. Je ",WHITE,LIGHT_BLUE,1);
-		lcd->drawText(20,140,"bestuurt het spel met de joystick,",WHITE,LIGHT_BLUE,1);
-		lcd->drawText(20,150,"hiermee kun je de auto hard of",WHITE,LIGHT_BLUE,1);
-		lcd->drawText(20,160,"zacht naar links of rechts",WHITE,LIGHT_BLUE,1);
-		lcd->drawText(20,170,"laten rijden. ",WHITE,LIGHT_BLUE,1);
+		String helptext[] = {"GoFast is een racegame met als doel","zo lang mogelijk op de baan te","blijven. Als de auto op de rode","strook komt dan ben je af. De auto",
+			"die je bestuurd gaat steeds sneller","rijden waardoor het spel steeds","moeilijker wordt. Hoe langer je het","vol houdt, hoe hoger je score is.",
+			"De drie hoogste scores worden","opgeslagen in de Highscore lijst. Je","bestuurt het spel met de joystick,","hiermee kun je de auto hard of",
+		"zacht naar links of rechts","laten rijden."};
+		int yasregel = 40;
+		for (int i = 0; i < 14; i++)
+		{
+			lcd->drawText(20,yasregel,helptext[0+ i],WHITE,LIGHT_BLUE,1);
+	     	yasregel = yasregel + 10;
+		}
 		
 		while(help_screen)
 		{
