@@ -26,7 +26,7 @@ class Button
 		 * @note the width and height are applied automatically
 		 */			
 		Button(uint8_t y, char* text);
-		
+				
 		/**
 		 * Draw a button on the given lcd
 		 * 
@@ -52,10 +52,10 @@ class Button
 						
 		private:
 			uint16_t x;
-			uint8_t y;
+			uint16_t y;
 			uint16_t width;
 			uint8_t height;
-			char text_string[81];
+			char text_string[15];
 		
 };
 
