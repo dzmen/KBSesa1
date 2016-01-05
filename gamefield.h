@@ -4,6 +4,7 @@
 #define _GAMEFIELD_h
 
 #include <MI0283QT9.h>
+#include "car.h"
 
 class Gamefield
 {
@@ -20,7 +21,7 @@ class Gamefield
 		 * 
 		 * @note Generate the random road
 		 */			
-		void Generate();
+		void Generate(Car *game_car);
 		/**
 		 * Function SetTimer
 		 * 

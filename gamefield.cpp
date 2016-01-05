@@ -1,4 +1,5 @@
 #include "gamefield.h"
+#include "car.h"
 #include <Arduino.h>
 #include <GraphicsLib.h>
 #include <MI0283QT9.h>
@@ -46,14 +47,14 @@ uint8_t * Gamefield::GetPos()
 	return pos;
 }
 
-void Gamefield::Generate()
+void Gamefield::Generate(Car *game_car)
 {
 	if (newpos == 100 || newpos == pos[0])
 	{
 		newpos = random(1, 15);
 	}
 	uint8_t vorigepos = 100;
-	for (int i = 0; i < 6; i++)
+	for (uint8_t i = 0; i < 6; i++)
 	{
 		if (vorigepos == 100)
 		{
@@ -63,10 +64,12 @@ void Gamefield::Generate()
 		if (vorigepos > pos[i])
 		{
 			MoveRoad(i, 1);
+			game_car->Refresh();
 			vorigepos = pos[i]-1;
 		}else if (vorigepos < pos[i])
 		{
 			MoveRoad(i, 0);
+			game_car->Refresh();
 			vorigepos = pos[i]+1;
 		}
 	}

@@ -17,18 +17,10 @@
 #define DARK_BLUE RGB(0,128,255)
 
 volatile uint16_t teller = 0;
-volatile uint8_t speed = 0;
 volatile uint32_t seconds = 0;
-volatile uint8_t changeroad = 0;
 
 ISR(TIMER2_OVF_vect) {
 	teller++;
-	speed++;
-	if ( speed >= 2)
-	{
-		changeroad = 1;
-		speed = 0;
-	}
 	if ( teller >= 300)
 	{
 		seconds++;
@@ -121,13 +113,12 @@ void Game::run()
 		field.StartRoad();
 		field.SetTimer(0);
 		field.SetHS(game_highscores.getHighscore(1).score);
-		game_car.Init(lcd);	
+		game_car.Init(lcd, nunchuk);	
 		
 		while(start_game)
 		{
-			field.Generate();
+			field.Generate(&game_car);
 			field.SetTimer(seconds);
-			game_car.Refresh(nunchuk);
 
 			if (offroad(game_car.GetPos(), field.GetPos()))
 			{
@@ -331,14 +322,12 @@ void Game::removeLastTouch()
 }
 
 uint8_t Game::offroad(uint16_t carpos, uint8_t * roadpos){
-	//carpos.  -20 is min,  +20 is max
-	//roadpos. roadpos * 10 + 10 is min, roadpos * 10 + 130 is max
 	uint8_t roadmin = ((roadpos[4]>roadpos[5])?roadpos[4]:roadpos[5]);
 	uint8_t roadmax = ((roadpos[4]>roadpos[5])?roadpos[5]:roadpos[4]);
-	if ((roadmin * 10 + 18) >= (carpos - 20) || (roadmax * 10 + 140) <= (carpos + 20))
+	if ((roadmin * 10 + 20) >= (carpos - 30) || (roadmax * 10 + 140) <= (carpos + 20))
 	{
 		return 1;
-		}else{
+	}else{
 		return 0;
 	}
 }
