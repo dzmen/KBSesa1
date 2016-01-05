@@ -15,7 +15,14 @@ int main()
 	
 	lcd.begin();
 	
-	lcd.touchStartCal();
+	//TOP SECRET CODE 
+	lcd.tp_matrix.a = 79800;
+	lcd.tp_matrix.b = 4294966596;
+	lcd.tp_matrix.c = 4250933096;
+	lcd.tp_matrix.d = 2700;
+	lcd.tp_matrix.e = 57800;
+	lcd.tp_matrix.f = 4291263596;
+	lcd.tp_matrix.div = 109865;
 	
 	//lcd.fillScreen(RGB(153,204,255));
 	//
