@@ -240,9 +240,24 @@ void Game::run()
 		}
 		else
 		{
-			removeLastTouch();
-			start_game = 0;
-			main_screen = 1;
+			lcd->drawText(20, 40, "Game over", WHITE, LIGHT_BLUE, 4);
+			lcd->drawText(105, 80, "Score:", WHITE, LIGHT_BLUE, 2);
+			lcd->drawInteger(200,80,quittime,DEC, WHITE, LIGHT_BLUE, 2);
+			
+			Button back = Button(200, "back");
+			back.drawButton(lcd);
+			
+			while(gameover)
+			{
+				updateTouch();
+				
+				if (back.isPressed(touch_x, touch_y))
+				{
+					removeLastTouch();
+					gameover = 0;
+					main_screen = 1;
+				}
+			}
 		}
 	}
 	/**
