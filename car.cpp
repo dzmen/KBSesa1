@@ -5,10 +5,9 @@
 #include "ArduinoNunchuk.h"
 #include "car.h"
 
-void Car::Init(MI0283QT9 *lcd, ArduinoNunchuk nunchuck)
+void Car::Init(MI0283QT9 *lcd)
 {
 	lcdscherm = lcd;
-	nunchuk = nunchuck;
 	
 	//Starting position of the car
 	x = 180;
@@ -26,7 +25,30 @@ void Car::Init(MI0283QT9 *lcd, ArduinoNunchuk nunchuck)
 	lcdscherm->fillRect(x + 10, 205, 10, 15, RGB(0,0,0)); //right rear
 }
 
-void Car::Refresh()
+
+void Car::ObstacleSlow(){
+	y = 20;
+	lcdscherm->fillTriangle(x-50,y+10,x-30,y+10,x-40,y+20,RGB(255,196,0));
+	lcdscherm->fillRect(x-43,y,6,10,RGB(255,196,0));
+}
+
+void Car::ObstacleFast(){
+	lcdscherm->fillTriangle(x-50,y+10,x-30,y+10,x-40,y,RGB(255,196,0));
+	lcdscherm->fillRect(x-43,y+10,6,10,RGB(255,196,0));
+}
+
+void Car::ObstacleSteering(){
+	lcdscherm->fillTriangle(x-40,y,x-47,y+5,x-40,y+10,RGB(255,196,0));
+	lcdscherm->fillRect(x-40,y+4,7,2,RGB(255,196,0));
+	lcdscherm->fillTriangle(x-33,y,x-26,y+5,x-33,y+10,RGB(255,196,0));
+}
+
+void Car::ObstacleBlock(){
+	lcdscherm->fillRect(x-40,y,20,20,RGB(0,0,0));
+}
+
+
+void Car::Refresh(ArduinoNunchuk nunchuk)
 {
 	nunchuk.update();
 	
