@@ -16,6 +16,26 @@
 #define LIGHT_BLUE RGB(153,204,255)
 #define DARK_BLUE RGB(0,128,255)
 
+volatile uint16_t teller = 0;
+volatile uint8_t speed = 0;
+volatile uint32_t seconds = 0;
+volatile uint8_t changeroad = 0;
+
+ISR(TIMER2_OVF_vect) {
+	teller++;
+	speed++;
+	if ( speed >= 2)
+	{
+		changeroad = 1;
+		speed = 0;
+	}
+	if ( teller >= 300)
+	{
+		seconds++;
+		teller = 0;
+	}
+}
+
 void Game::init(MI0283QT9 lcd_p)
 {
 	lcd = &lcd_p;
@@ -23,6 +43,10 @@ void Game::init(MI0283QT9 lcd_p)
 	start_game = 0;
 	highcore_screen = 0;
 	help_screen = 0;
+	TCCR2B |= (1 << CS22) | (1<<CS20);
+	TIMSK2 |= (1<<TOIE2);
+	TCNT2 = 0;
+	sei();
 	game_highscores.init();
 }
 
@@ -85,30 +109,40 @@ void Game::run()
 	*/	
 	else if(start_game)
 	{		
+		uint8_t gameover = 0;
+		seconds = 0;
+		removeLastTouch();
 		nunchuk = ArduinoNunchuk();
 		nunchuk.init();
+		nunchuk.update();
+		randomSeed(nunchuk.accelX + nunchuk.accelY + nunchuk.accelZ);
 		field.Init(lcd);
+		field.Reset();
 		field.StartRoad();
 		field.SetTimer(0);
-		field.SetHS(1000);
+		field.SetHS(game_highscores.getHighscore(1).score);
 		game_car.Init(lcd);	
 		
 		while(start_game)
 		{
 			field.Generate();
+			field.SetTimer(seconds);
 			game_car.Refresh(nunchuk);
-			
-			//if (nunchuk.cButton)
-			//{
-				uint8_t test = random(1,200);
-				
-				if (game_highscores.checkIfHighscore(test))
+
+			if (offroad(game_car.GetPos(), field.GetPos()))
+			{
+				start_game = 0;
+				quittime = seconds;
+				gameover = 1;
+			}
+		}
+			if (game_highscores.checkIfHighscore(quittime))
 				{								
 					lcd->fillScreen(LIGHT_BLUE);
 				
 					lcd->drawText(20, 20, "New highscore!", WHITE, LIGHT_BLUE, 2);
 					lcd->drawText(20, 40, "Score:", WHITE, LIGHT_BLUE, 2);	
-					lcd->drawInteger(120,40,test,DEC, WHITE, LIGHT_BLUE, 2);				
+					lcd->drawInteger(120,40,quittime,DEC, WHITE, LIGHT_BLUE, 2);				
 				
 					Selector char1 = Selector(lcd,20,90,0);
 					Selector char2 = Selector(lcd,80,90,1);
@@ -119,7 +153,7 @@ void Game::run()
 					Button add = Button(200, "add");
 					add.drawButton(lcd);
 				
-					while(start_game)
+					while(gameover)
 					{
 						updateTouch();
 					
@@ -183,13 +217,12 @@ void Game::run()
 						{
 							char s[6] = {char1.getChar(),char2.getChar(),char3.getChar(),char4.getChar(),char5.getChar(),'\0'};
 							
-							game_highscores.addHighscore(test,s);
+							game_highscores.addHighscore(quittime,s);
 							removeLastTouch();
-							start_game = 0;
+							gameover = 0;
 							main_screen = 1;
 						}
 					}
-				//}
 			}
 			else
 			{
@@ -197,7 +230,6 @@ void Game::run()
 				start_game = 0;
 				main_screen = 1;
 			}
-		}
 	}
 	/**
 	* Run the highscore screen
@@ -267,7 +299,7 @@ void Game::run()
 			yasregel = yasregel + 10;
 		}
 		
-		game_highscores.resetHighscores();
+		//game_highscores.resetHighscores();
 		
 		while(help_screen)
 		{
@@ -296,4 +328,17 @@ void Game::removeLastTouch()
 	lcd->lcd_y = 0;
 	touch_x = 0;
 	touch_y = 0;
+}
+
+uint8_t Game::offroad(uint16_t carpos, uint8_t * roadpos){
+	//carpos.  -20 is min,  +20 is max
+	//roadpos. roadpos * 10 + 10 is min, roadpos * 10 + 130 is max
+	uint8_t roadmin = ((roadpos[4]>roadpos[5])?roadpos[4]:roadpos[5]);
+	uint8_t roadmax = ((roadpos[4]>roadpos[5])?roadpos[5]:roadpos[4]);
+	if ((roadmin * 10 + 18) >= (carpos - 20) || (roadmax * 10 + 140) <= (carpos + 20))
+	{
+		return 1;
+		}else{
+		return 0;
+	}
 }

@@ -50,6 +50,8 @@ class Gamefield
 		 */	
 		
 		uint8_t * GetPos();
+		
+		void Reset();
 	private:
 		uint8_t pos[6] = {8,8,8,8,8,8};
 		uint8_t newpos = 100;

@@ -12,7 +12,6 @@
 class Game
 {
 	public:
-		
 		/**
 		 * Constructs a Game object
 		 * 
@@ -39,6 +38,7 @@ class Game
 		void removeLastTouch();
 		
 		//functie die makkelijk test kan plaatsten
+		
 	
 	private:
 		MI0283QT9 *lcd;
@@ -54,6 +54,10 @@ class Game
 		Car game_car;
 		ArduinoNunchuk nunchuk;
 		Highscore game_highscores;
+		
+		uint32_t quittime = 0;
+		
+		uint8_t offroad(uint16_t carpos, uint8_t * roadpos);
 };
 
 #endif

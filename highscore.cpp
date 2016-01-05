@@ -5,7 +5,7 @@
 #include "highscore.h"
 #include <avr/eeprom.h>
 #include <string.h>
-#include "EEPROMAnything.h"
+//#include "EEPROMAnything.h"
 
 void Highscore::init(/*uint16_t adress1, uint16_t adress2, uint16_t adress3*/)
 {
