@@ -5,9 +5,10 @@
 #include "ArduinoNunchuk.h"
 #include "car.h"
 
-void Car::Init(MI0283QT9 *lcd)
+void Car::Init(MI0283QT9 *lcd, ArduinoNunchuk nunchuck)
 {
 	lcdscherm = lcd;
+	nunchuk = nunchuck;
 	
 	//Starting position of the car
 	x = 180;
@@ -48,7 +49,7 @@ void Car::ObstacleBlock(){
 }
 
 
-void Car::Refresh(ArduinoNunchuk nunchuk)
+void Car::Refresh()
 {
 	nunchuk.update();
 	

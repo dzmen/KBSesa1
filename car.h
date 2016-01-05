@@ -14,14 +14,14 @@ class Car
 		 * 
 		 * @param lcd The LCD to render the car on
 		 */	
-		void Init(MI0283QT9 *lcd);
+		void Init(MI0283QT9 *lcd, ArduinoNunchuk nunchuck);
 		
 		/**
 		 * Constructs a Car
 		 * 
 		 * @param nunchuk Used to get nunchuk values
 		 */	
-		void Refresh(ArduinoNunchuk nunchuk);
+		void Refresh();
 		
 		void ObstacleSlow(); // Draw arrow to the back
 		void ObstacleFast(); // Draw arrow to the front
@@ -34,7 +34,7 @@ class Car
 		MI0283QT9 * lcdscherm;
 		uint16_t x;
 	    uint16_t y;
-	
+		ArduinoNunchuk nunchuk;
 	
 		void Straight();
 		/**
