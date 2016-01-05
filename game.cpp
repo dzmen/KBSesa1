@@ -31,9 +31,14 @@ ISR(TIMER2_OVF_vect) {
 void Game::init(MI0283QT9 lcd_p)
 {
 	lcd = &lcd_p;
+	touch_x = 0;
+	touch_y = 0;
+	screen_brightness = 50;
+	lcd->led(screen_brightness);
 	main_screen = 1;
 	start_game = 0;
 	highcore_screen = 0;
+	settings_screen = 0;
 	help_screen = 0;
 	TCCR2B |= (1 << CS22) | (1<<CS20);
 	TIMSK2 |= (1<<TOIE2);
@@ -41,6 +46,7 @@ void Game::init(MI0283QT9 lcd_p)
 	sei();
 	game_highscores.init();
 }
+	
 
 void Game::run()
 {
@@ -50,24 +56,28 @@ void Game::run()
 	*/	
 	if(main_screen)
 	{
+		removeLastTouch();
+		
 		lcd->fillScreen(LIGHT_BLUE);	
-		Button start = Button(40, "Start");
-		Button highscores = Button(100, "Highscores");
-		Button help = Button(160, "Help");
+		Button start = Button(30, "Start");
+		Button highscores = Button(85, "Highscores");
+		Button settings = Button(140, "Settings");
+		Button help = Button(195, "Help");
 		
 		start.drawButton(lcd);
 		highscores.drawButton(lcd);
-		help.drawButton(lcd);
-		
+		settings.drawButton(lcd);
+		help.drawButton(lcd);	
+				
 		while(main_screen)
 		{			
-			
 			updateTouch();
 			
 			if (start.isPressed(touch_x, touch_y))
 			{
 				start.removeButton(lcd);
 				highscores.removeButton(lcd);
+				settings.removeButton(lcd);
 				help.removeButton(lcd);
 				removeLastTouch();
 				main_screen = 0;
@@ -78,16 +88,29 @@ void Game::run()
 			{
 				start.removeButton(lcd);
 				highscores.removeButton(lcd);
+				settings.removeButton(lcd);
 				help.removeButton(lcd);
 				removeLastTouch();
 				main_screen = 0;
 				highcore_screen = 1;
 				
 			}
+			else if (settings.isPressed(touch_x, touch_y))
+			{
+				start.removeButton(lcd);
+				highscores.removeButton(lcd);
+				settings.removeButton(lcd);
+				help.removeButton(lcd);
+				removeLastTouch();
+				main_screen = 0;
+				settings_screen = 1;
+				
+			}
 			else if (help.isPressed(touch_x, touch_y))
 			{
 				start.removeButton(lcd);
 				highscores.removeButton(lcd);
+				settings.removeButton(lcd);
 				help.removeButton(lcd);
 				removeLastTouch();
 				main_screen = 0;
@@ -113,7 +136,7 @@ void Game::run()
 		field.StartRoad();
 		field.SetTimer(0);
 		field.SetHS(game_highscores.getHighscore(1).score);
-		game_car.Init(lcd, nunchuk);	
+		game_car.Init(lcd, nunchuk);
 		
 		while(start_game)
 		{
@@ -127,100 +150,100 @@ void Game::run()
 				gameover = 1;
 			}
 		}
-			if (game_highscores.checkIfHighscore(quittime))
-				{								
-					lcd->fillScreen(LIGHT_BLUE);
-				
-					lcd->drawText(20, 20, "New highscore!", WHITE, LIGHT_BLUE, 2);
-					lcd->drawText(20, 40, "Score:", WHITE, LIGHT_BLUE, 2);	
-					lcd->drawInteger(120,40,quittime,DEC, WHITE, LIGHT_BLUE, 2);				
-				
-					Selector char1 = Selector(lcd,20,90,0);
-					Selector char2 = Selector(lcd,80,90,1);
-					Selector char3 = Selector(lcd,140,90,1);
-					Selector char4 = Selector(lcd,200,90,1);
-					Selector char5 = Selector(lcd,260,90,1);						
-				
-					Button add = Button(200, "add");
-					add.drawButton(lcd);
-				
-					while(gameover)
-					{
-						updateTouch();
-					
-						char1.drawChar(lcd);
-						char2.drawChar(lcd);
-						char3.drawChar(lcd);
-						char4.drawChar(lcd);
-						char5.drawChar(lcd);
-					
-						if (char1.up_p->isPressed(touch_x, touch_y)) //1
-						{
-							char1.add();
-							removeLastTouch();
-						}
-						if (char1.down_p->isPressed(touch_x, touch_y))
-						{
-							char1.subtract();
-							removeLastTouch();
-						}
-						if (char2.up_p->isPressed(touch_x, touch_y)) //2
-						{
-							char2.add();
-							removeLastTouch();
-						}
-						if (char2.down_p->isPressed(touch_x, touch_y))
-						{
-							char2.subtract();
-							removeLastTouch();
-						}
-						if (char3.up_p->isPressed(touch_x, touch_y)) //3
-						{
-							char3.add();
-							removeLastTouch();
-						}
-						if (char3.down_p->isPressed(touch_x, touch_y))
-						{
-							char3.subtract();
-							removeLastTouch();
-						}
-						if (char4.up_p->isPressed(touch_x, touch_y)) //4
-						{
-							char4.add();
-							removeLastTouch();
-						}
-						if (char4.down_p->isPressed(touch_x, touch_y))
-						{
-							char4.subtract();
-							removeLastTouch();
-						}
-						if (char5.up_p->isPressed(touch_x, touch_y)) //5
-						{
-							char5.add();
-							removeLastTouch();
-						}
-						if (char5.down_p->isPressed(touch_x, touch_y))
-						{
-							char5.subtract();
-							removeLastTouch();
-						}					
-						if (add.isPressed(touch_x, touch_y))
-						{
-							char s[6] = {char1.getChar(),char2.getChar(),char3.getChar(),char4.getChar(),char5.getChar(),'\0'};
-							
-							game_highscores.addHighscore(quittime,s);
-							removeLastTouch();
-							gameover = 0;
-							main_screen = 1;
-						}
-					}
-			}
-			else
+		if (game_highscores.checkIfHighscore(quittime))
+		{
+			lcd->fillScreen(LIGHT_BLUE);
+			
+			lcd->drawText(20, 20, "New highscore!", WHITE, LIGHT_BLUE, 2);
+			lcd->drawText(20, 40, "Score:", WHITE, LIGHT_BLUE, 2);
+			lcd->drawInteger(120,40,quittime,DEC, WHITE, LIGHT_BLUE, 2);
+			
+			Selector char1 = Selector(lcd,20,90,0);
+			Selector char2 = Selector(lcd,80,90,1);
+			Selector char3 = Selector(lcd,140,90,1);
+			Selector char4 = Selector(lcd,200,90,1);
+			Selector char5 = Selector(lcd,260,90,1);
+			
+			Button add = Button(200, "add");
+			add.drawButton(lcd);
+			
+			while(gameover)
 			{
-				removeLastTouch();
-				start_game = 0;
-				main_screen = 1;
+				updateTouch();
+				
+				char1.drawChar(lcd);
+				char2.drawChar(lcd);
+				char3.drawChar(lcd);
+				char4.drawChar(lcd);
+				char5.drawChar(lcd);
+				
+				if (char1.up_p->isPressed(touch_x, touch_y)) //1
+				{
+					char1.add();
+					removeLastTouch();
+				}
+				if (char1.down_p->isPressed(touch_x, touch_y))
+				{
+					char1.subtract();
+					removeLastTouch();
+				}
+				if (char2.up_p->isPressed(touch_x, touch_y)) //2
+				{
+					char2.add();
+					removeLastTouch();
+				}
+				if (char2.down_p->isPressed(touch_x, touch_y))
+				{
+					char2.subtract();
+					removeLastTouch();
+				}
+				if (char3.up_p->isPressed(touch_x, touch_y)) //3
+				{
+					char3.add();
+					removeLastTouch();
+				}
+				if (char3.down_p->isPressed(touch_x, touch_y))
+				{
+					char3.subtract();
+					removeLastTouch();
+				}
+				if (char4.up_p->isPressed(touch_x, touch_y)) //4
+				{
+					char4.add();
+					removeLastTouch();
+				}
+				if (char4.down_p->isPressed(touch_x, touch_y))
+				{
+					char4.subtract();
+					removeLastTouch();
+				}
+				if (char5.up_p->isPressed(touch_x, touch_y)) //5
+				{
+					char5.add();
+					removeLastTouch();
+				}
+				if (char5.down_p->isPressed(touch_x, touch_y))
+				{
+					char5.subtract();
+					removeLastTouch();
+				}
+				if (add.isPressed(touch_x, touch_y))
+				{
+					char s[6] = {char1.getChar(),char2.getChar(),char3.getChar(),char4.getChar(),char5.getChar(),'\0'};
+					
+					game_highscores.addHighscore(quittime,s);
+					removeLastTouch();
+					gameover = 0;
+					main_screen = 1;
+				}
 			}
+		}
+		else
+		{
+			removeLastTouch();
+			start_game = 0;
+			main_screen = 1;
+		}
 	}
 	/**
 	* Run the highscore screen
@@ -273,6 +296,85 @@ void Game::run()
 		}
 	}
 	/**
+	* Run the settings screen
+	*/	
+	else if(settings_screen)
+	{
+		Button back = Button(200, "back");
+		back.drawButton(lcd);
+		
+		lcd->drawText(20,20,"Highscores: ",WHITE,LIGHT_BLUE,2);
+		
+		highscore copy_of_first_highscore = game_highscores.getHighscore(1);
+		Button delete_highscores = Button(20,60,"delete");
+		
+		if (copy_of_first_highscore.score)
+		{			
+			delete_highscores.drawButton(lcd);
+		}
+		else
+		{
+			lcd->drawText(20,60,"No highscores.",WHITE,LIGHT_BLUE,2);
+		}
+		
+		
+		lcd->drawText(20,100,"Screen brightness: ",WHITE,LIGHT_BLUE,2);
+		
+		Button niv_1 = Button(20,140,"1");
+		niv_1.drawButton(lcd);
+		
+		Button niv_2 = Button(70,140,"2");
+		niv_2.drawButton(lcd);
+		
+		Button niv_3 = Button(120,140,"3");
+		niv_3.drawButton(lcd);
+		
+		Button niv_4 = Button(170,140,"4");
+		niv_4.drawButton(lcd);
+				
+		while(settings_screen)
+		{
+			updateTouch();
+			
+			if (delete_highscores.isPressed(touch_x,touch_y))
+			{
+				if (copy_of_first_highscore.score)
+				{
+					game_highscores.resetHighscores();
+					delete_highscores.removeButton(lcd);
+					delete_highscores.removeButton(lcd);
+				}
+			}
+			if (niv_1.isPressed(touch_x,touch_y))
+			{				
+				screen_brightness  = 25;
+				lcd->led(screen_brightness);				
+			}
+			if (niv_2.isPressed(touch_x,touch_y))
+			{
+				screen_brightness = 50;
+				lcd->led(screen_brightness);		
+			}
+			if (niv_3.isPressed(touch_x,touch_y))
+			{
+				screen_brightness = 75;
+				lcd->led(screen_brightness);
+			}
+			if (niv_4.isPressed(touch_x,touch_y))
+			{
+				screen_brightness = 100;
+				lcd->led(screen_brightness);
+			}			
+			if (back.isPressed(touch_x, touch_y))
+			{
+				removeLastTouch();
+				settings_screen = 0;
+				main_screen = 1;
+			}	
+			
+		}
+	}
+	/**
 	* Run the help screen
 	*/	
 	else if(help_screen)
@@ -289,8 +391,6 @@ void Game::run()
 			lcd->drawText(20,yasregel,helptext[0+ i],WHITE,LIGHT_BLUE,1);
 			yasregel = yasregel + 10;
 		}
-		
-		//game_highscores.resetHighscores();
 		
 		while(help_screen)
 		{
@@ -327,7 +427,7 @@ uint8_t Game::offroad(uint16_t carpos, uint8_t * roadpos){
 	if ((roadmin * 10 + 20) >= (carpos - 30) || (roadmax * 10 + 140) <= (carpos + 20))
 	{
 		return 1;
-	}else{
+		}else{
 		return 0;
 	}
 }

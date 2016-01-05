@@ -12,6 +12,7 @@
 class Game
 {
 	public:
+		
 		/**
 		 * Constructs a Game object
 		 * 
@@ -36,19 +37,18 @@ class Game
 		 * 
 		 */	
 		void removeLastTouch();
-		
-		//functie die makkelijk test kan plaatsten
-		
 	
 	private:
 		MI0283QT9 *lcd;
 		uint8_t main_screen;
 		uint8_t start_game;
 		uint8_t highcore_screen;
+		uint8_t settings_screen;
 		uint8_t help_screen;
 		
 		uint16_t touch_x;
 		uint16_t touch_y;
+		uint8_t screen_brightness;
 		
 		Gamefield field;
 		Car game_car;
