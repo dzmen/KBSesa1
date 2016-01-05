@@ -7,6 +7,7 @@
 #include "ArduinoNunchuk.h"
 #include "gamefield.h"
 #include "car.h"
+#include "highscore.h"
 
 class Game
 {
@@ -17,7 +18,7 @@ class Game
 		 * 
 		 * @param lcd_p A pointer to a lcd to render the game elements on
 		 */	
-		void Init(MI0283QT9 lcd_p);	
+		void init(MI0283QT9 lcd_p);	
 		
 		/**
 		 * Runs the game object
@@ -36,6 +37,8 @@ class Game
 		 * 
 		 */	
 		void removeLastTouch();
+		
+		//functie die makkelijk test kan plaatsten
 	
 	private:
 		MI0283QT9 *lcd;
@@ -47,9 +50,10 @@ class Game
 		uint16_t touch_x;
 		uint16_t touch_y;
 		
-		Gamefield veld;
-		Car autotje;
+		Gamefield field;
+		Car game_car;
 		ArduinoNunchuk nunchuk;
+		Highscore game_highscores;
 };
 
 #endif
