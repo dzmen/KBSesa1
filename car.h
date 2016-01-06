@@ -21,17 +21,15 @@ class Car
 		 * 
 		 * @param nunchuk Used to get nunchuk values
 		 */	
-
-				void Refresh();
-				
+		void Refresh();
+		
 		uint16_t GetPos();
 		
 	private:
 		MI0283QT9 * lcdscherm;
-		ArduinoNunchuk nunchuk;
 		uint16_t x;
 	    uint16_t y;
-	
+		ArduinoNunchuk nunchuk;
 	
 		void Straight();
 		/**

@@ -7,7 +7,6 @@
 #include "button.h"
 #include "ArduinoNunchuk.h"
 #include "gamefield.h"
-#include "car.h"
 #include "highscore.h"
 #include "selector.h"
 
@@ -21,8 +20,6 @@
 
 volatile uint16_t teller = 0;
 volatile uint32_t seconds = 0;
-volatile uint16_t pauseteller = 0;
-volatile uint32_t pauseseconds = 0;
 
 ISR(TIMER2_OVF_vect) {
 	teller++;
@@ -136,19 +133,22 @@ void Game::run()
 		nunchuk.init();
 		nunchuk.update();
 		randomSeed(nunchuk.accelX + nunchuk.accelY + nunchuk.accelZ);
-		field.Init(lcd);
-		field.Reset();
+		field.Init(lcd, nunchuk);
 		field.StartRoad();
 		field.SetTimer(0);
 		field.SetHS(game_highscores.getHighscore(1).score);
-		game_car.Init(lcd, nunchuk);
 		
 		while(start_game)
 		{
-			field.Generate(&game_car);
+			field.Generate();
 			field.SetTimer(seconds);
-			
-			nunchuk.update();
+
+			if (field.CheckGame())
+			{
+				start_game = 0;
+				quittime = seconds;
+				gameover = 1;
+			}
 			if (nunchuk.zButton)
 			{
 				pauseteller = teller;
@@ -186,13 +186,6 @@ void Game::run()
 				lcd->fillRect(pos * 10 + 140, 40, 10, 40, ORANGE);
 				lcd->fillRect(pos * 10 + 150, 40, 320 - (pos * 10 + 150), 40, GREEN);
 			}
-
-			if (offroad(game_car.GetPos(), field.GetPos()))
-			{
-				start_game = 0;
-				quittime = seconds;
-				gameover = 1;
-			}
 		}
 		if (game_highscores.checkIfHighscore(quittime))
 		{
@@ -208,7 +201,7 @@ void Game::run()
 			Selector char4 = Selector(lcd,200,90,1);
 			Selector char5 = Selector(lcd,260,90,1);
 			
-			Button add = Button(200, "add");
+			Button add = Button(200, "Done");
 			add.drawButton(lcd);
 			
 			while(gameover)
@@ -483,15 +476,4 @@ void Game::removeLastTouch()
 	lcd->lcd_y = 0;
 	touch_x = 0;
 	touch_y = 0;
-}
-
-uint8_t Game::offroad(uint16_t carpos, uint8_t * roadpos){
-	uint8_t roadmin = ((roadpos[4]>roadpos[5])?roadpos[4]:roadpos[5]);
-	uint8_t roadmax = ((roadpos[4]>roadpos[5])?roadpos[5]:roadpos[4]);
-	if ((roadmin * 10 + 20) >= (carpos - 30) || (roadmax * 10 + 140) <= (carpos + 20))
-	{
-		return 1;
-		}else{
-		return 0;
-	}
 }

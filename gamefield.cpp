@@ -1,4 +1,5 @@
 #include "gamefield.h"
+#include "ArduinoNunchuk.h"
 #include "car.h"
 #include <Arduino.h>
 #include <GraphicsLib.h>
@@ -8,9 +9,18 @@
 #define ORANGE RGB(240, 100, 20)
 #define GRAY RGB(160, 160, 160)
 
-void Gamefield::Init(MI0283QT9 * lcd)
+void Gamefield::Init(MI0283QT9 * lcd, ArduinoNunchuk nunchuck)
 {
 	lcdscherm = lcd;
+	nunchuk = nunchuck;
+	game_car.Init(lcd, nunchuk);
+	
+	for (uint8_t i = 0;i<6;i++)
+	{
+		pos[i] = 8;
+	}
+	newpos = 100;
+	timer = 0;
 }
 
 void Gamefield::StartRoad()
@@ -47,7 +57,7 @@ uint8_t * Gamefield::GetPos()
 	return pos;
 }
 
-void Gamefield::Generate(Car *game_car)
+void Gamefield::Generate()
 {
 	if (newpos == 100 || newpos == pos[0])
 	{
@@ -56,21 +66,26 @@ void Gamefield::Generate(Car *game_car)
 	uint8_t vorigepos = 100;
 	for (uint8_t i = 0; i < 6; i++)
 	{
-		if (vorigepos == 100)
+		if (!gameover)
 		{
-			vorigepos = newpos;
-		}
+			if (vorigepos == 100)
+			{
+				vorigepos = newpos;
+			}
 
-		if (vorigepos > pos[i])
-		{
-			MoveRoad(i, 1);
-			game_car->Refresh();
-			vorigepos = pos[i]-1;
-		}else if (vorigepos < pos[i])
-		{
-			MoveRoad(i, 0);
-			game_car->Refresh();
-			vorigepos = pos[i]+1;
+			if (vorigepos > pos[i])
+			{
+				MoveRoad(i, 1);
+				game_car.Refresh();
+				vorigepos = pos[i]-1;
+				CheckGame();
+			}else if (vorigepos < pos[i])
+			{
+				MoveRoad(i, 0);
+				game_car.Refresh();
+				vorigepos = pos[i]+1;
+				CheckGame();
+			}
 		}
 	}
 	lcdscherm->drawInteger(8, 8, timer, DEC, RGB(0,0,0), GREEN, 1||0x00);
@@ -87,12 +102,20 @@ void Gamefield::SetHS(uint32_t score)
 	lcdscherm->drawInteger(290, 25, score, DEC, RGB(0,0,0) , GREEN, 1);
 }
 
-void Gamefield::Reset()
+uint8_t Gamefield::CheckGame()
 {
-	for (uint8_t i = 0;i<6;i++)
+	uint8_t gameover = offroad(game_car.GetPos(), GetPos());
+	return gameover;
+}
+
+uint8_t Gamefield::offroad(uint16_t carpos, uint8_t * roadpos)
+{
+	uint8_t roadmin = ((roadpos[4]>roadpos[5])?roadpos[4]:roadpos[5]);
+	uint8_t roadmax = ((roadpos[4]>roadpos[5])?roadpos[5]:roadpos[4]);
+	if ((roadmin * 10 + 20) >= (carpos - 20) || (roadmax * 10 + 140) <= (carpos + 20))
 	{
-		pos[i] = 8;
+		return 1;
+	}else{
+		return 0;
 	}
-	newpos = 100;
-	timer = 0;
 }

@@ -15,13 +15,13 @@ class Gamefield
 		 * @param lcd The lcd screen driver
 		 * @note Binds the lcd screen to the class
 		 */	
-		void Init(MI0283QT9 * lcd);
+		void Init(MI0283QT9 * lcd, ArduinoNunchuk nunchuck);
 		/**
 		 * Function Generate
 		 * 
 		 * @note Generate the random road
 		 */			
-		void Generate(Car *game_car);
+		void Generate();
 		/**
 		 * Function SetTimer
 		 * 
@@ -52,12 +52,16 @@ class Gamefield
 		
 		uint8_t * GetPos();
 		
-		void Reset();
+		uint8_t CheckGame();
+		
 	private:
-		uint8_t pos[6] = {8,8,8,8,8,8};
-		uint8_t newpos = 100;
-		uint32_t timer = 0;
+		uint8_t pos[6] = {0,0,0,0,0,0};
+		uint8_t gameover = 0;
+		uint8_t newpos;
+		uint32_t timer;
 		MI0283QT9 * lcdscherm;
+		ArduinoNunchuk nunchuk;
+		Car game_car;
 		/**
 		 * Function MoveRoad
 		 * 
@@ -66,6 +70,8 @@ class Gamefield
 		 * @note draw 40 Y pixels of the road and 10 X on both side of the road
 		 */			
 		void MoveRoad(uint8_t hpos, uint8_t dir);
+		
+		uint8_t offroad(uint16_t carpos, uint8_t * roadpos);
 };
 
 #endif

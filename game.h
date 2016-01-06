@@ -6,7 +6,6 @@
 #include <MI0283QT9.h>
 #include "ArduinoNunchuk.h"
 #include "gamefield.h"
-#include "car.h"
 #include "highscore.h"
 
 class Game
@@ -51,13 +50,13 @@ class Game
 		uint8_t screen_brightness;
 		
 		Gamefield field;
-		Car game_car;
 		ArduinoNunchuk nunchuk;
 		Highscore game_highscores;
 		
-		uint32_t quittime = 0;
+		uint16_t pauseteller = 0;
+		uint32_t pauseseconds = 0;
 		
-		uint8_t offroad(uint16_t carpos, uint8_t * roadpos);
+		uint32_t quittime = 0;
 };
 
 #endif

@@ -2,13 +2,14 @@
 
 #include <GraphicsLib.h>
 #include <MI0283QT9.h>
-#include "ArduinoNunchuk.h"
+#include "Arduinonunchuk.h"
 #include "car.h"
 
 void Car::Init(MI0283QT9 *lcd, ArduinoNunchuk nunchuck)
 {
 	lcdscherm = lcd;
 	nunchuk = nunchuck;
+	
 	//Starting position of the car
 	x = 180;
 	
@@ -24,7 +25,6 @@ void Car::Init(MI0283QT9 *lcd, ArduinoNunchuk nunchuck)
 	lcdscherm->fillRect(x + 10, 175, 10, 15, RGB(0,0,0)); //right front
 	lcdscherm->fillRect(x + 10, 205, 10, 15, RGB(0,0,0)); //right rear
 }
-
 
 void Car::Refresh()
 {
