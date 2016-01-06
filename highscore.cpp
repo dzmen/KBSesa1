@@ -1,9 +1,6 @@
 // highscore.cpp
-// 
-// 
 
 #include "highscore.h"
-#include <EEPROM/EEPROM.h>
 #include <string.h>
 #include "EEPROMAnything.h"
 

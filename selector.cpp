@@ -1,6 +1,4 @@
-// 
-// 
-// 
+// selector.cpp
 
 #include "selector.h"
 #include "button.h"
@@ -40,8 +38,10 @@ Selector::~Selector()
 
 void Selector::add()
 {
+	//if char is empty or 'z'
 	if (alfhabet == ' ' || alfhabet == 0x7A)
 	{
+		//if char is empty and 'z'
 		if(empty && alfhabet == 0x7A)
 		{
 			alfhabet = ' ';
@@ -59,8 +59,10 @@ void Selector::add()
 
 void Selector::subtract()
 {
+	//if char is empty or 'a'
 	if (alfhabet == ' ' || alfhabet == 0x61)
 	{
+		//if char is empty and 'a'
 		if(empty && alfhabet == 0x61)
 		{
 			alfhabet = ' ';

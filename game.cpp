@@ -1,6 +1,4 @@
 // game.cpp
-// 
-// 
 
 #include "game.h"
 #include <MI0283QT9.h>

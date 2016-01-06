@@ -8,6 +8,7 @@
 class Button
 {
 	public:	
+	
 		/**
 		 * Constructs a Button object
 		 * 
@@ -55,8 +56,6 @@ class Button
 			uint16_t y;
 			uint16_t width;
 			uint8_t height;
-			char text_string[15];
-		
+			char text_string[15];		
 };
-
 #endif
