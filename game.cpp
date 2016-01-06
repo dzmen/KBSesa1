@@ -357,28 +357,33 @@ void Game::run()
 				{
 					game_highscores.resetHighscores();
 					delete_highscores.removeButton(lcd);
-					delete_highscores.removeButton(lcd);
+					lcd->drawText(20,60,"No highscores.",WHITE,LIGHT_BLUE,2);
+					removeLastTouch();
 				}
 			}
 			if (niv_1.isPressed(touch_x,touch_y))
 			{				
 				screen_brightness  = 25;
-				lcd->led(screen_brightness);				
+				lcd->led(screen_brightness);
+				removeLastTouch();				
 			}
 			if (niv_2.isPressed(touch_x,touch_y))
 			{
 				screen_brightness = 50;
-				lcd->led(screen_brightness);		
+				lcd->led(screen_brightness);
+				removeLastTouch();		
 			}
 			if (niv_3.isPressed(touch_x,touch_y))
 			{
 				screen_brightness = 75;
 				lcd->led(screen_brightness);
+				removeLastTouch();
 			}
 			if (niv_4.isPressed(touch_x,touch_y))
 			{
 				screen_brightness = 100;
 				lcd->led(screen_brightness);
+				removeLastTouch();
 			}			
 			if (back.isPressed(touch_x, touch_y))
 			{
