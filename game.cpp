@@ -15,9 +15,14 @@
 #define BLACK RGB(0,0,0)
 #define LIGHT_BLUE RGB(153,204,255)
 #define DARK_BLUE RGB(0,128,255)
+#define GREEN RGB(100, 240, 20)
+#define ORANGE RGB(240, 100, 20)
+#define GRAY RGB(160, 160, 160)
 
 volatile uint16_t teller = 0;
 volatile uint32_t seconds = 0;
+volatile uint16_t pauseteller = 0;
+volatile uint32_t pauseseconds = 0;
 
 ISR(TIMER2_OVF_vect) {
 	teller++;
@@ -142,6 +147,45 @@ void Game::run()
 		{
 			field.Generate(&game_car);
 			field.SetTimer(seconds);
+			
+			nunchuk.update();
+			if (nunchuk.zButton)
+			{
+				pauseteller = teller;
+				pauseseconds = seconds;
+				uint8_t pause1 = 1;
+				uint8_t pause2 = 0;
+				lcd->drawText(80, 45, "Pause", WHITE, LIGHT_BLUE, 4);
+				
+				while(pause1)
+				{
+					nunchuk.update();
+					if (!nunchuk.zButton)
+					{
+						pause2 = 1;
+						pause1 = 0;
+					}
+				}
+				
+				while(pause2)
+				{
+					nunchuk.update();
+					if (nunchuk.zButton)
+					{
+						teller = pauseteller;
+						seconds = pauseseconds;
+						pause2 = 0;
+					}
+				}
+				
+				uint8_t pos = field.GetPos()[1];
+				
+				lcd->fillRect(0, 40, pos * 10 + 10, 40, GREEN);
+				lcd->fillRect(pos * 10 + 10, 40, 10, 40, ORANGE);
+				lcd->fillRect(pos * 10 + 20, 40, 120, 40, GRAY);
+				lcd->fillRect(pos * 10 + 140, 40, 10, 40, ORANGE);
+				lcd->fillRect(pos * 10 + 150, 40, 320 - (pos * 10 + 150), 40, GREEN);
+			}
 
 			if (offroad(game_car.GetPos(), field.GetPos()))
 			{
