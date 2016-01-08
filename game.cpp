@@ -15,6 +15,7 @@
 #define GREEN RGB(100, 240, 20)
 #define ORANGE RGB(240, 100, 20)
 #define GRAY RGB(160, 160, 160)
+#define YELLOW RGB(255, 196, 0)
 
 volatile uint16_t teller = 0;
 volatile uint32_t seconds = 0;
