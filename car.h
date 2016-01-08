@@ -13,15 +13,18 @@ class Car
 		 * Constructs a Car
 		 * 
 		 * @param lcd The LCD to render the car on
+		 * @param nunchuk Used to get nunchuk values
 		 */	
 		void Init(MI0283QT9 *lcd, ArduinoNunchuk nunchuck);
 		
 		/**
-		 * Constructs a Car
-		 * 
-		 * @param nunchuk Used to get nunchuk values
+		 * Constructs a Car		 
 		 */	
 		void Refresh();
+		
+		/**
+		 * Get the position of the car		 
+		 */		
 		
 		uint16_t GetPos();
 		

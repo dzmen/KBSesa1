@@ -4,29 +4,83 @@
 #include <GraphicsLib.h>
 #include <MI0283QT9.h>
 
+#define YELLOW RGB(255,196,0)
+
 void Obstacles::Init(MI0283QT9 * lcd)
 {
 	lcdscherm = lcd;
-	y = 20;
-	x = 180;
+	ypos = 1;
 }
 
-void Obstacles::ObstacleSlow(){
-	lcdscherm->fillTriangle(x-50,y+10,x-30,y+10,x-40,y+20,RGB(255,196,0));
-	lcdscherm->fillRect(x-43,y,6,10,RGB(255,196,0));
+void Obstacles::Createobject(uint8_t pos)
+{
+	xpos = random(10, 110);
+	objecttype = random(0,3);
+	switch (objecttype)
+	{
+		case 0:
+			ObstacleSteering(pos);
+			break;
+		case 1:
+			ObstacleBlock(pos);
+			break;
+		case 2:
+			ObstacleSlow(pos);
+			break;
+		case 3:
+			ObstacleFast(pos);
+			break;
+	}
 }
 
-void Obstacles::ObstacleFast(){
-	lcdscherm->fillTriangle(x-50,y+10,x-30,y+10,x-40,y,RGB(255,196,0));
-	lcdscherm->fillRect(x-43,y+10,6,10,RGB(255,196,0));
+void Obstacles::Next(uint8_t pos)
+{
+	ypos++;
+	switch (objecttype)
+	{
+		case 0:
+			ObstacleSteering(pos);
+			break;
+		case 1:
+			ObstacleBlock(pos);
+			break;
+		case 2:
+			ObstacleSlow(pos);
+			break;
+		case 3:
+			ObstacleFast(pos);
+			break;
+	}
 }
 
-void Obstacles::ObstacleSteering(){
-	lcdscherm->fillTriangle(x-40,y,x-47,y+5,x-40,y+10,RGB(255,196,0));
-	lcdscherm->fillRect(x-40,y+4,7,2,RGB(255,196,0));
-	lcdscherm->fillTriangle(x-33,y,x-26,y+5,x-33,y+10,RGB(255,196,0));
+void Obstacles::ObstacleSlow(uint8_t pos)
+{
+	uint16_t xobject = pos * 10 + 20 + xpos;
+	uint16_t yobject = ypos * 40 + 20;
+	lcdscherm->fillTriangle(xobject-50,yobject+10,xobject-30,yobject+10,xobject-40,yobject+20,YELLOW);
+	lcdscherm->fillRect(xobject-43,yobject,6,10,YELLOW);
 }
 
-void Obstacles::ObstacleBlock(){
-	lcdscherm->fillRect(x-40,y,20,20,RGB(0,0,0));
+void Obstacles::ObstacleFast(uint8_t pos)
+{
+	uint16_t xobject = pos * 10 + 20 + xpos;
+	uint16_t yobject = ypos * 40 + 20;
+	lcdscherm->fillTriangle(xobject-50,yobject+10,xobject-30,yobject+10,xobject-40,yobject,YELLOW);
+	lcdscherm->fillRect(xobject-43,yobject+10,6,10,YELLOW);
+}
+
+void Obstacles::ObstacleSteering(uint8_t pos)
+{
+	uint16_t xobject = pos * 10 + 20 + xpos;
+	uint16_t yobject = ypos * 40 + 20;
+	lcdscherm->fillTriangle(xobject-40,yobject,xobject-47,yobject+5,xobject-40,yobject+10,YELLOW);
+	lcdscherm->fillRect(xobject-40,yobject+4,7,2,YELLOW);
+	lcdscherm->fillTriangle(xobject-33,yobject,xobject-26,yobject+5,xobject-33,yobject+10,YELLOW);
+}
+
+void Obstacles::ObstacleBlock(uint8_t pos)
+{
+	uint16_t xobject = pos * 10 + 20 + xpos;
+	uint16_t yobject = ypos * 40 + 20;
+	lcdscherm->fillRect(xobject-40,yobject,15,15,YELLOW);
 }
