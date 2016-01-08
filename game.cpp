@@ -434,28 +434,110 @@ void Game::run()
 	*/	
 	else if(help_screen)
 	{
+		uint8_t help1 = 1;
+		uint8_t help2 = 0;
+		
 		Button back = Button(200, "back");
 		back.drawButton(lcd);
-		String helptext[] = {"GoFast is een racegame met als doel","zo lang mogelijk op de baan te","blijven. Als de auto op de rode","strook komt dan ben je af. De auto",
-			"die je bestuurd gaat steeds sneller","rijden waardoor het spel steeds","moeilijker wordt. Hoe langer je het","vol houdt, hoe hoger je score is.",
-			"De drie hoogste scores worden","opgeslagen in de Highscore lijst. Je","bestuurt het spel met de joystick,","hiermee kun je de auto hard of",
-		"zacht naar links of rechts","laten rijden."};
-		int yasregel = 40;
-		for (int i = 0; i < 14; i++)
+		
+		if (help1)
 		{
-			lcd->drawText(20,yasregel,helptext[0+ i],WHITE,LIGHT_BLUE,1);
-			yasregel = yasregel + 10;
+			lcd->fillRect(0, 0, 320, 180, LIGHT_BLUE);
+			uint8_t help_1 = 1;
+			
+			Button next = Button(240, 200, ">>");
+			next.drawButton(lcd);
+			
+			String helptext[] = {"GoFast is a game where you have to","stay on the road as long as possible.","If the car touches the red line it's","game over. While playing, obstacles",
+			"will appear on the road which become","more frequent over time. You control","the car with the nunchuk joystick."};
+			
+			int y = 15;
+			for (int i = 0; i < 7; i++)
+			{
+				lcd->drawText(15, y, helptext[i], WHITE, LIGHT_BLUE, 1);
+				y += 10;
+			}
+			
+			lcd->drawText(15, 110, "Controls:", WHITE, LIGHT_BLUE, 1);
+			lcd->drawText(15, 130, "Joystick left  = Move car to the left", WHITE, LIGHT_BLUE, 1);
+			lcd->drawText(15, 145, "Joystick right = Move car to the right", WHITE, LIGHT_BLUE, 1);
+			lcd->drawText(15, 160, "Z button       = Pause game", WHITE, LIGHT_BLUE, 1);
+			
+			
+			while(help1)
+			{
+				updateTouch();
+				
+				if (next.isPressed(touch_x, touch_y))
+				{
+					next.removeButton(lcd);
+					removeLastTouch();
+					help1 = 0;
+					help2 = 1;
+				}
+				if (back.isPressed(touch_x, touch_y))
+				{
+					next.removeButton(lcd);
+					back.drawButton(lcd);
+					removeLastTouch();
+					help1 = 0;
+					help_screen = 0;
+					main_screen = 1;
+				}
+			}
 		}
 		
-		while(help_screen)
+		if (help2)
 		{
-			updateTouch();
+			lcd->fillRect(0, 0, 320, 180, LIGHT_BLUE);
+			uint8_t help_2 = 1;
 			
-			if (back.isPressed(touch_x, touch_y))
+			Button prev = Button(10, 200, "<<");
+			prev.drawButton(lcd);
+			
+			lcd->drawText(20, 15, "Obstacles:", WHITE, LIGHT_BLUE, 1);
+			
+			//Arrow down
+			lcd->fillTriangle(20, 50, 40, 50, 30, 60, YELLOW);
+			lcd->fillRect(27, 40, 6, 10, YELLOW);
+			
+			//Arrow up
+			lcd->fillTriangle(20, 88, 40, 88, 30, 78, YELLOW);
+			lcd->fillRect(27, 88, 6, 10, YELLOW);
+			
+			//Double arrow
+			lcd->fillTriangle(26, 122, 19, 127, 26, 132, YELLOW);
+			lcd->fillRect(26, 126, 7, 3, YELLOW);
+			lcd->fillTriangle(33, 122, 40, 127, 33, 132, YELLOW);
+			
+			//Block
+			lcd->fillRect(20, 158, 20, 20, YELLOW);
+			
+			lcd->drawText(50, 45, "= Car moves down", WHITE, LIGHT_BLUE, 1);
+			lcd->drawText(50, 85, "= Car moves up", WHITE, LIGHT_BLUE, 1);
+			lcd->drawText(50, 125, "= Reverse steering", WHITE, LIGHT_BLUE, 1);
+			lcd->drawText(50, 165, "= Game over", WHITE, LIGHT_BLUE, 1);
+			
+			while(help2)
 			{
-				removeLastTouch();
-				help_screen = 0;
-				main_screen = 1;
+				updateTouch();
+				
+				if (prev.isPressed(touch_x, touch_y))
+				{
+					prev.removeButton(lcd);
+					removeLastTouch();
+					help2 = 0;
+					help1 = 1;
+				}
+				if (back.isPressed(touch_x, touch_y))
+				{
+					prev.removeButton(lcd);
+					back.drawButton(lcd);
+					removeLastTouch();
+					help2 = 0;
+					help_screen = 0;
+					main_screen = 1;
+				}
 			}
 		}
 	}
