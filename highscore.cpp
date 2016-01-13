@@ -69,7 +69,7 @@ highscore Highscore::getHighscore(uint8_t highscore_number)
 	}
 }
 
-uint8_t Highscore::checkIfHighscore(uint8_t score)
+uint16_t Highscore::checkIfHighscore(uint16_t score)
 {
 	if (score > highscore_1.score)
 	{
@@ -92,7 +92,7 @@ uint8_t Highscore::checkIfHighscore(uint8_t score)
 	}
 }
 
-void Highscore::addHighscore(uint8_t score, char name[6])
+void Highscore::addHighscore(uint16_t score, char name[6])
 {
 	if (highscore_to_change->position == 1)
 	{

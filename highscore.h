@@ -42,7 +42,7 @@ class Highscore
 		 * @param name A string to save the users name in
 		 * @note if necessary, this function copies the previous highscore to the next one
 		 */	
-		void addHighscore(uint8_t score, char name[6]);
+		void addHighscore(uint16_t score, char name[6]);
 		
 		/**
 		 * Get access to the highscore array
@@ -51,7 +51,7 @@ class Highscore
 		 * @return a 1 if there is a new highscore, 0 if there is not
 		 * @note if there is a new highscore, the address is saved to highscore_to_change var for later use
 		 */			
-		uint8_t checkIfHighscore(uint8_t score);		
+		uint16_t checkIfHighscore(uint16_t score);		
 		
 		highscore *highscore_to_change;		
 		
