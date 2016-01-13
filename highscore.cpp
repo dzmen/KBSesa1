@@ -7,8 +7,6 @@
 void Highscore::init()
 {
 	adress_1 = 10;
-	//adress_2 = 20;
-	//adress_3 = 30;
 	
 	refreshLocalHighscores();
 }
@@ -18,17 +16,14 @@ void Highscore::resetHighscores()
 	highscore_1.position = 1;
 	highscore_1.score = 0;
 	strcpy(highscore_1.name,"");
-	//saveToEeprom(1);
 	
 	highscore_2.position = 2;
 	highscore_2.score = 0;
 	strcpy(highscore_1.name,"");
-	//saveToEeprom(2);
 	
 	highscore_3.position = 3;
 	highscore_3.score = 0;
 	strcpy(highscore_1.name,"");
-	//saveToEeprom(3);
 	saveToEeprom();
 }
 
@@ -92,17 +87,14 @@ void Highscore::addHighscore(uint16_t score, char name[6])
 	{
 		highscore_3.score = highscore_2.score;
 		strcpy(highscore_3.name,highscore_2.name);
-		//saveToEeprom(3);
 		
 		highscore_2.score = highscore_1.score;
 		strcpy(highscore_2.name,highscore_1.name);
-		//saveToEeprom(2);		
 	}
 	else if (highscore_to_change->position == 2)
 	{
 		highscore_3.score = highscore_2.score;
 		strcpy(highscore_3.name,highscore_2.name);
-		//saveToEeprom(3);
 	}
 	
 	highscore_to_change->score = score;
