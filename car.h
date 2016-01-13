@@ -35,7 +35,7 @@ class Car
 		ArduinoNunchuk nunchuk;
 		uint16_t x;
 		uint16_t y;
-	
+	    uint8_t dir;
 		/**
 		 * Keeps the car going straight
 		 */	
@@ -54,6 +54,9 @@ class Car
 		 * @param width The amount of pixels the car has to move
 		 */	
 		void Right(uint8_t width);
+		void Up();
+		void Down();
+		void Reverse();
 };
 
 #endif

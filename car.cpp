@@ -14,6 +14,7 @@ void Car::Init(MI0283QT9 *lcd, ArduinoNunchuk nunchuck)
 	//Starting position of the car
 	x = 180;
 	y = 165;
+	dir = 0;
 	
 	//Draw frame
 	lcdscherm->fillRect(x - 10, y, 20, 60, RGB(0,0,255));
@@ -29,29 +30,67 @@ void Car::Init(MI0283QT9 *lcd, ArduinoNunchuk nunchuck)
 }
 
 
+void Car::Reverse(){
+	if (dir)
+	{
+		dir = 0;
+	} else
+	dir = 1;
+}
+
 void Car::Refresh()
 {
 	nunchuk.update();
-	
+   
 	if (nunchuk.analogX < 30)
 	{
+		if (dir == 0){
+		
 		Left(10);
+		}  else {
+			Right(10);
+		}
+		
 	}
 	else if (nunchuk.analogX > 30 && nunchuk.analogX <= 50)
 	{
-		Left(8);
+		if (dir == 0){
+			
+			Left(8);
+			}  else {
+			Right(8);
+		}
+		
 	}
 	else if (nunchuk.analogX > 50 && nunchuk.analogX <= 70)
 	{
-		Left(6);
+			if (dir == 0){
+				
+				Left(6);
+				}  else {
+				Right(6);
+			}
+			
 	}
 	else if (nunchuk.analogX > 70 && nunchuk.analogX <= 90)
 	{
-		Left(4);
+			if (dir == 0){
+				
+				Left(4);
+				}  else {
+				Right(4);
+			}
+			;
 	}
 	else if (nunchuk.analogX > 90 && nunchuk.analogX <= 100)
 	{
-		Left(2);
+			if (dir == 0){
+				
+				Left(2);
+				}  else {
+				Right(2);
+			}
+			
 	}
 	else if (nunchuk.analogX > 100 && nunchuk.analogX <= 150)
 	{
@@ -60,23 +99,49 @@ void Car::Refresh()
 	
 	else if (nunchuk.analogX > 150 && nunchuk.analogX <= 160)
 	{
-		Right(2);
+		if (dir == 0)
+		{
+			Right(2);
+		} else {
+			Left(2);
+		}
+		
 	}
 	else if (nunchuk.analogX > 160 && nunchuk.analogX <= 180)
 	{
-		Right(4);
+		if (dir == 0)
+		{
+			Right(4);
+			} else {
+			Left(4);
+		}
 	}
 	else if (nunchuk.analogX > 180 && nunchuk.analogX <= 195)
 	{
-		Right(6);
+		if (dir == 0)
+		{
+			Right(6);
+			} else {
+			Left(6);
+		}
 	}
 	else if (nunchuk.analogX > 195 && nunchuk.analogX <= 210)
 	{
-		Right(8);
+		if (dir == 0)
+		{
+			Right(8);
+			} else {
+			Left(8);
+		}
 	}
 	else if (nunchuk.analogX > 210)
 	{
-		Right(10);
+		if (dir == 0)
+		{
+			Right(10);
+			} else {
+			Left(10);
+		}
 	}
 	
 }
@@ -100,6 +165,49 @@ void Car::Straight()
 	lcdscherm->fillRect(x + 10, y + 10, 10, 15, RGB(0,0,0)); //right front
 	lcdscherm->fillRect(x + 10, y + 40, 10, 15, RGB(0,0,0)); //right rear
 }
+
+void Car::Up(){
+	y += 40;
+	//Draw frame
+	lcdscherm->fillRect(x - 10, y, 20, 60, RGB(0,0,255));
+	
+	//Draw spoiler
+	lcdscherm->fillRect(x - 20, y + 60, 40, 10, RGB(0,0,255));
+	
+
+	
+	//Draw wheels
+	lcdscherm->fillRect(x - 20, y + 10, 10, 15, RGB(0,0,0)); //left front
+	lcdscherm->fillRect(x - 20, y + 40, 10, 15, RGB(0,0,0)); //left rear
+	lcdscherm->fillRect(x + 10, y + 10, 10, 15, RGB(0,0,0)); //right front
+	lcdscherm->fillRect(x + 10, y + 40, 10, 15, RGB(0,0,0)); //right rear
+	
+	//Road
+	lcdscherm->fillRect(x - 20, y + 60, 40, 40, RGB(160,160,160));
+
+}
+
+void Car::Down(){
+	y -= 40;
+	//Draw frame
+	lcdscherm->fillRect(x - 10, y, 20, 60, RGB(0,0,255));
+	
+	//Draw spoiler
+	lcdscherm->fillRect(x - 20, y + 60, 40, 10, RGB(0,0,255));
+	
+
+	
+	//Draw wheels
+	lcdscherm->fillRect(x - 20, y + 10, 10, 15, RGB(0,0,0)); //left front
+	lcdscherm->fillRect(x - 20, y + 40, 10, 15, RGB(0,0,0)); //left rear
+	lcdscherm->fillRect(x + 10, y + 10, 10, 15, RGB(0,0,0)); //right front
+	lcdscherm->fillRect(x + 10, y + 40, 10, 15, RGB(0,0,0)); //right rear
+	
+    //Road
+    lcdscherm->fillRect(x - 20, y - 40, 40, 40, RGB(160,160,160));
+
+}
+
 
 
 void Car::Left(uint8_t width)
