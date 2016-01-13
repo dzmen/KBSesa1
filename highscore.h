@@ -12,6 +12,7 @@ typedef struct
 	char name[6];
 }highscore;
 
+
 class Highscore
 {
 	
@@ -60,8 +61,8 @@ class Highscore
 		highscore highscore_2;
 		highscore highscore_3;
 		int adress_1;
-		int adress_2;
-		int adress_3;
+		
+		highscore eeprom_array[3];
 		
 		/**
 		 * Copy the highscores from the EEPROM to local variables
@@ -69,11 +70,9 @@ class Highscore
 		void refreshLocalHighscores();
 		
 		/**
-		 * Save a new highscore to the EEPROM
-		 *
-		 * @param highscore_number Choose which highscore to save
+		 * Save the eeprom_array to the EEPROM
 		 */	
-		void saveToEeprom(uint8_t highscore_number);
+		void saveToEeprom();
 };
 
 #endif
