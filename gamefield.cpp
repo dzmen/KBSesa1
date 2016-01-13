@@ -1,6 +1,7 @@
 #include "gamefield.h"
 #include "ArduinoNunchuk.h"
 #include "car.h"
+#include "obstacles.h"
 #include <Arduino.h>
 #include <GraphicsLib.h>
 #include <MI0283QT9.h>
@@ -14,7 +15,7 @@ void Gamefield::Init(MI0283QT9 * lcd, ArduinoNunchuk nunchuck)
 	lcdscherm = lcd;
 	nunchuk = nunchuck;
 	game_car.Init(lcd, nunchuk);
-	
+	obsta.Init(lcd);
 	for (uint8_t i = 0;i<6;i++)
 	{
 		pos[i] = 8;
@@ -30,6 +31,10 @@ void Gamefield::StartRoad()
 	lcdscherm->fillRect(100, 0, 120, 240, GRAY);
 	lcdscherm->fillRect(220, 0, 10, 240, ORANGE);
 	lcdscherm->fillRect(230, 0, 90, 240, GREEN);
+	generateobstacle = 10;
+	countobstacles = 0;
+	nummer = 4;
+	gameover = 0;
 }
 
 void Gamefield::MoveRoad(uint8_t hpos, uint8_t dir)
@@ -64,7 +69,8 @@ void Gamefield::Generate()
 		newpos = random(1, 15);
 	}
 	uint8_t vorigepos = 100;
-	for (uint8_t i = 0; i < 6; i++)
+	uint8_t i = 0;
+	for (i = 0; i < 6; i++)
 	{
 		if (!gameover)
 		{
@@ -88,6 +94,36 @@ void Gamefield::Generate()
 			}
 		}
 	}
+	CheckGame();
+	if(i == 6 && countobstacles > 0){
+		i = 0;
+		obsta.Next(0);
+		if (obsta.IsActive(0) == 0)
+		{
+			countobstacles--;
+		}
+	}
+	if (timer == generateobstacle && countobstacles < totalobstacles)
+	{
+		obsta.Createobject(countobstacles, pos[0]);
+		if (timer < 20)
+		{
+			generateobstacle += 10;
+		}else if (timer > 19 && timer < 36)
+		{
+			generateobstacle += 8;
+		}else if (timer > 35 && timer < 48)
+		{
+			generateobstacle += 6;
+		}else if (timer > 47 && timer < 56)
+		{
+			generateobstacle += 4;
+		}else if (timer > 55)
+		{
+			generateobstacle += 2;
+		}
+		countobstacles++;
+	}
 	lcdscherm->drawInteger(8, 8, timer, DEC, RGB(0,0,0), GREEN, 1||0x00);
 	lcdscherm->drawText(240, 8, "HIGHSCORE:", RGB(0,0,0) , GREEN, 1||0x00);
 }
@@ -104,14 +140,86 @@ void Gamefield::SetHS(uint32_t score)
 
 uint8_t Gamefield::CheckGame()
 {
-	uint8_t gameover = offroad(game_car.GetPos(), GetPos());
+	uint8_t gameover = 0;
+	if (countobstacles > 0)
+	{
+		(offroad(game_car.GetPosX(), GetPos())||Working(0))?gameover=1:gameover=0;
+	}else{
+		(offroad(game_car.GetPosX(), GetPos()))?gameover=1:gameover=0;
+	}
 	return gameover;
+}
+
+uint8_t Gamefield::Working(uint8_t arrayid){
+	uint16_t obstacleX = 0;
+	uint16_t obstacleY = 0;
+	uint16_t xobject = obsta.GetRoad(arrayid) * 10 + 20 + obsta.GetXpos(arrayid);
+	uint16_t yobject = obsta.GetYpos(arrayid) * 40 + 10;
+	switch (obsta.GetType(arrayid))
+	{
+		case 0:   // steering
+			xobject -= 48;
+			obstacleX = 23;
+			obstacleY = 11;
+			break;
+		case 1: // block
+			xobject -= 40;
+			obstacleX = 15;
+			obstacleY = 15;
+			break;
+		case 2: // slow
+			xobject -=51;
+			obstacleX = 22;
+			obstacleY = 21;
+			break;
+		case 3: // fast
+			xobject -=51;
+			obstacleX = 22;
+			obstacleY = 21;
+			break;
+	}
+  if ((xobject + obstacleX > game_car.GetPosX() - 20) && (xobject < game_car.GetPosX() + 20) && (yobject + obstacleY < game_car.GetPosY() +70) && (yobject > game_car.GetPosY()))
+  {
+	  switch(obsta.GetType(arrayid)){
+		case 0: //steering
+			game_car.Reverse();
+			obsta.RemoveObstacle(arrayid);
+			countobstacles--;
+			return 0;
+			break;
+		case 1: //block
+			return 1;
+			break;
+		case 2://down
+			obsta.RemoveObstacle(arrayid);
+			if (nummer != 4)
+			{
+				nummer++;
+				game_car.Down();
+			}
+			countobstacles--;
+			return 0;
+		    break;
+		case 3://up
+			obsta.RemoveObstacle(arrayid);
+			if (nummer != 1)
+			{
+				nummer--;
+				game_car.Up();
+			}
+			countobstacles--;
+			return 0;
+			break;
+	  }
+	}else{
+		return 0;
+	}
 }
 
 uint8_t Gamefield::offroad(uint16_t carpos, uint8_t * roadpos)
 {
-	uint8_t roadmin = ((roadpos[4]>roadpos[5])?roadpos[4]:roadpos[5]);
-	uint8_t roadmax = ((roadpos[4]>roadpos[5])?roadpos[5]:roadpos[4]);
+	uint8_t roadmin = ((roadpos[nummer]>roadpos[nummer+1])?roadpos[nummer]:roadpos[nummer+1]);
+	uint8_t roadmax = ((roadpos[nummer]>roadpos[nummer+1])?roadpos[nummer+1]:roadpos[nummer]);
 	if ((roadmin * 10 + 20) >= (carpos - 20) || (roadmax * 10 + 140) <= (carpos + 20))
 	{
 		return 1;

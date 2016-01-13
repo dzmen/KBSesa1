@@ -4,43 +4,33 @@
 #define _OBSTACLES_h
 
 #include <MI0283QT9.h>
-
-typedef struct
-{
-			uint8_t obstacleY;
-			uint8_t obstacleX;
-			uint8_t roadpos;
-			uint8_t ypos;
-			uint8_t xpos;
-			uint8_t type;
-
-}Obstacle;
-
-
 class Obstacles{
 	public:
-	
-			void Init(MI0283QT9 * lcd);
-			void Createobject(uint8_t pos);
-			void Next();
-			
-			
-	
+     		void Init(MI0283QT9 * lcd);
+	 		void Createobject(uint8_t arrayid, uint8_t pos);
+			void Next(uint8_t arrayid);
+			uint8_t IsActive(uint8_t arrayid);	
+			uint8_t GetRoad(uint8_t arrayid);
+			uint8_t GetXpos(uint8_t arrayid);
+			uint8_t GetYpos(uint8_t arrayid);
+			uint8_t GetType(uint8_t arrayid);
+			void RemoveObstacle(uint8_t arrayid);		
 	private:
-		uint16_t x;
-		uint16_t y;
+		typedef struct
+		{
+			uint8_t roadpos;
+			uint8_t xpos;
+			uint8_t ypos;
+			uint8_t type;
+			uint8_t active;
+		}Obstacle;
 		MI0283QT9 * lcdscherm;
-		uint8_t ypos;
-		uint8_t xpos;
-		uint8_t objecttype;
-		uint8_t obstacleY;
-		uint8_t obstacleX;
-		uint8_t roadpos;
-		
-		void ObstacleSlow(); // Draw arrow to the back
-		void ObstacleFast(); // Draw arrow to the front
-		void ObstacleSteering(); // Draw double arrow
-		void ObstacleBlock(); // Draw Block
+		Obstacle objecten[10];
+
+		void ObstacleSlow(uint8_t arrayid); // Draw arrow to the back
+		void ObstacleFast(uint8_t arrayid); // Draw arrow to the front
+		void ObstacleSteering(uint8_t arrayid); // Draw double arrow
+		void ObstacleBlock(uint8_t arrayid); // Draw Block
 	
 	
 	};

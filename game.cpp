@@ -22,7 +22,7 @@ volatile uint32_t seconds = 0;
 
 ISR(TIMER2_OVF_vect) {
 	teller++;
-	if ( teller >= 300)
+	if ( teller >= 260)
 	{
 		seconds++;
 		teller = 0;
@@ -148,20 +148,15 @@ void Game::run()
 				quittime = seconds;
 				gameover = 1;
 			}
-			
 			nunchuk.update();
-			
-			//Check if Z button is pressed
 			if (nunchuk.zButton)
 			{
-				//Save current counter and score
 				pauseteller = teller;
 				pauseseconds = seconds;
 				uint8_t pause1 = 1;
 				uint8_t pause2 = 0;
 				lcd->drawText(80, 45, "Pause", WHITE, LIGHT_BLUE, 4);
 				
-				//Check if Z button is released
 				while(pause1)
 				{
 					nunchuk.update();
@@ -172,13 +167,11 @@ void Game::run()
 					}
 				}
 				
-				//Check if Z button is pressed again
 				while(pause2)
 				{
 					nunchuk.update();
 					if (nunchuk.zButton)
 					{
-						//Restore the counter and score so the game can continue
 						teller = pauseteller;
 						seconds = pauseseconds;
 						pause2 = 0;
@@ -187,7 +180,6 @@ void Game::run()
 				
 				uint8_t pos = field.GetPos()[1];
 				
-				//Fill in part of the road to replace "pause" text
 				lcd->fillRect(0, 40, pos * 10 + 10, 40, GREEN);
 				lcd->fillRect(pos * 10 + 10, 40, 10, 40, ORANGE);
 				lcd->fillRect(pos * 10 + 20, 40, 120, 40, GRAY);

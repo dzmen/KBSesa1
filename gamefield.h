@@ -5,6 +5,9 @@
 
 #include <MI0283QT9.h>
 #include "car.h"
+#include "obstacles.h"
+
+
 
 class Gamefield
 {
@@ -56,12 +59,17 @@ class Gamefield
 		
 	private:
 		uint8_t pos[6] = {0,0,0,0,0,0};
-		uint8_t gameover = 0;
+		uint8_t gameover;
+		uint8_t countobstacles = 0;
+		uint8_t totalobstacles = 1;
+		uint8_t generateobstacle;
 		uint8_t newpos;
 		uint32_t timer;
 		MI0283QT9 * lcdscherm;
 		ArduinoNunchuk nunchuk;
 		Car game_car;
+		Obstacles obsta;
+		uint8_t nummer;
 		/**
 		 * Function MoveRoad
 		 * 
@@ -72,6 +80,7 @@ class Gamefield
 		void MoveRoad(uint8_t hpos, uint8_t dir);
 		
 		uint8_t offroad(uint16_t carpos, uint8_t * roadpos);
+		uint8_t Working(uint8_t arrayid);
 };
 
 #endif

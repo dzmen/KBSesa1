@@ -28,7 +28,12 @@ class Car
 		 *
 		 * @return x coord of the car
 		 */		
-		uint16_t GetPos();
+		uint16_t GetPosX();
+		uint16_t GetPosY();
+		
+		void Up();
+		void Down();
+		void Reverse();
 		
 	private:
 		MI0283QT9 * lcdscherm;
@@ -54,9 +59,6 @@ class Car
 		 * @param width The amount of pixels the car has to move
 		 */	
 		void Right(uint8_t width);
-		void Up();
-		void Down();
-		void Reverse();
 };
 
 #endif
