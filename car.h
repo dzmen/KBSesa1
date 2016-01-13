@@ -9,32 +9,37 @@
 class Car
 {
 	public:
+	
 		/**
 		 * Constructs a Car
 		 * 
-		 * @param lcd The LCD to render the car on
+		 * @param *lcd Pointer to the LCD to render the car on
 		 * @param nunchuk Used to get nunchuk values
 		 */	
 		void Init(MI0283QT9 *lcd, ArduinoNunchuk nunchuck);
 		
 		/**
-		 * Constructs a Car		 
+		 * Refreshes the car so it can move depending on nunchuk direction	 
 		 */	
 		void Refresh();
 		
 		/**
-		 * Get the position of the car		 
+		 * Get the position of the car
+		 *
+		 * @return x coord of the car
 		 */		
-		
 		uint16_t GetPos();
 		
 	private:
 		MI0283QT9 * lcdscherm;
-		uint16_t x;
-	    uint16_t y;
 		ArduinoNunchuk nunchuk;
+		uint16_t x;
 	
+		/**
+		 * Keeps the car going straight
+		 */	
 		void Straight();
+		
 		/**
 		 * Moves the car to the left
 		 * 
@@ -49,6 +54,5 @@ class Car
 		 */	
 		void Right(uint8_t width);
 };
-
 
 #endif

@@ -7,6 +7,7 @@
 
 void Car::Init(MI0283QT9 *lcd, ArduinoNunchuk nunchuck)
 {
+	//Save lcd and nunchuk for further use later
 	lcdscherm = lcd;
 	nunchuk = nunchuck;
 	
@@ -101,6 +102,7 @@ void Car::Straight()
 
 void Car::Left(uint8_t width)
 {
+	//If car has not reached left side of screen yet, decrease x
 	if (x - width > 20)
 	{
 		x -= width;
@@ -129,6 +131,7 @@ void Car::Left(uint8_t width)
 
 void Car::Right(uint8_t width)
 {
+	//If car has not reached right side of screen yet, increase x
 	if (x + width < 300)
 	{
 		x += width;
