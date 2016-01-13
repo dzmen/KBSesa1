@@ -13,19 +13,21 @@ void Car::Init(MI0283QT9 *lcd, ArduinoNunchuk nunchuck)
 	
 	//Starting position of the car
 	x = 180;
+	y = 165;
 	
 	//Draw frame
-	lcdscherm->fillRect(x - 10, 165, 20, 60, RGB(0,0,255));
+	lcdscherm->fillRect(x - 10, y, 20, 60, RGB(0,0,255));
 	
 	//Draw spoiler
-	lcdscherm->fillRect(x - 20, 225, 40, 10, RGB(0,0,255));
+	lcdscherm->fillRect(x - 20, y + 60, 40, 10, RGB(0,0,255));
 	
 	//Draw wheels
-	lcdscherm->fillRect(x - 20, 175, 10, 15, RGB(0,0,0)); //left front
-	lcdscherm->fillRect(x - 20, 205, 10, 15, RGB(0,0,0)); //left rear
-	lcdscherm->fillRect(x + 10, 175, 10, 15, RGB(0,0,0)); //right front
-	lcdscherm->fillRect(x + 10, 205, 10, 15, RGB(0,0,0)); //right rear
+	lcdscherm->fillRect(x - 20, y + 10, 10, 15, RGB(0,0,0)); //left front
+	lcdscherm->fillRect(x - 20, y + 40, 10, 15, RGB(0,0,0)); //left rear
+	lcdscherm->fillRect(x + 10, y + 10, 10, 15, RGB(0,0,0)); //right front
+	lcdscherm->fillRect(x + 10, y + 40, 10, 15, RGB(0,0,0)); //right rear
 }
+
 
 void Car::Refresh()
 {
@@ -87,16 +89,16 @@ uint16_t Car::GetPos()
 void Car::Straight()
 {
 	//Draw frame
-	lcdscherm->fillRect(x - 10, 165, 20, 60, RGB(0,0,255));
+	lcdscherm->fillRect(x - 10, y, 20, 60, RGB(0,0,255));
 	
 	//Draw spoiler
-	lcdscherm->fillRect(x - 20, 225, 40, 10, RGB(0,0,255));
+	lcdscherm->fillRect(x - 20, y + 60, 40, 10, RGB(0,0,255));
 	
 	//Draw wheels
-	lcdscherm->fillRect(x - 20, 175, 10, 15, RGB(0,0,0)); //left front
-	lcdscherm->fillRect(x - 20, 205, 10, 15, RGB(0,0,0)); //left rear
-	lcdscherm->fillRect(x + 10, 175, 10, 15, RGB(0,0,0)); //right front
-	lcdscherm->fillRect(x + 10, 205, 10, 15, RGB(0,0,0)); //right rear
+	lcdscherm->fillRect(x - 20, y + 10, 10, 15, RGB(0,0,0)); //left front
+	lcdscherm->fillRect(x - 20, y + 40, 10, 15, RGB(0,0,0)); //left rear
+	lcdscherm->fillRect(x + 10, y + 10, 10, 15, RGB(0,0,0)); //right front
+	lcdscherm->fillRect(x + 10, y + 40, 10, 15, RGB(0,0,0)); //right rear
 }
 
 
@@ -109,24 +111,24 @@ void Car::Left(uint8_t width)
 	}
 	
 	//Frame
-	lcdscherm->fillRect(x - 10, 165, width, 60, RGB(0,0,255));
+	lcdscherm->fillRect(x - 10, y, width, 60, RGB(0,0,255));
 	
 	//Spoiler
-	lcdscherm->fillRect(x - 20, 225, width, 10, RGB(0,0,255));
+	lcdscherm->fillRect(x - 20, y + 60, width, 10, RGB(0,0,255));
 	
 	//Road
-	lcdscherm->fillRect(x + 10, 165, width, 60, RGB(160,160,160));
+	lcdscherm->fillRect(x + 10, y, width, 60, RGB(160,160,160));
 	
 	//Wheels
-	lcdscherm->fillRect(x - 20, 175, width, 15, RGB(0,0,0)); //left front
-	lcdscherm->fillRect(x - 20, 205, width, 15, RGB(0,0,0)); //left rear
-	lcdscherm->fillRect(x + 10, 175, width, 15, RGB(0,0,0)); //right front
-	lcdscherm->fillRect(x + 10, 205, width, 15, RGB(0,0,0)); //right rear
+	lcdscherm->fillRect(x - 20, y + 10, width, 15, RGB(0,0,0)); //left front
+	lcdscherm->fillRect(x - 20, y + 40, width, 15, RGB(0,0,0)); //left rear
+	lcdscherm->fillRect(x + 10, y + 10, width, 15, RGB(0,0,0)); //right front
+	lcdscherm->fillRect(x + 10, y + 40, width, 15, RGB(0,0,0)); //right rear
 	
 	//Road
-	lcdscherm->fillRect(x + 20, 175, width, 15, RGB(160,160,160));
-	lcdscherm->fillRect(x + 20, 205, width, 15, RGB(160,160,160));
-	lcdscherm->fillRect(x + 20, 225, width, 10, RGB(160,160,160));
+	lcdscherm->fillRect(x + 20, y + 10, width, 15, RGB(160,160,160));
+	lcdscherm->fillRect(x + 20, y + 40, width, 15, RGB(160,160,160));
+	lcdscherm->fillRect(x + 20, y + 60, width, 10, RGB(160,160,160));
 }
 
 void Car::Right(uint8_t width)
@@ -138,22 +140,22 @@ void Car::Right(uint8_t width)
 	}
 	
 	//Frame
-	lcdscherm->fillRect(x + 10 - width, 165, width, 60, RGB(0,0,255));
+	lcdscherm->fillRect(x + 10 - width, y, width, 60, RGB(0,0,255));
 	
 	//Spoiler
-	lcdscherm->fillRect(x + 20 - width, 225, width, 10, RGB(0,0,255));
+	lcdscherm->fillRect(x + 20 - width, y + 60, width, 10, RGB(0,0,255));
 	
 	//Road
-	lcdscherm->fillRect(x - 10 - width, 165, width, 60, RGB(160,160,160));
+	lcdscherm->fillRect(x - 10 - width, y, width, 60, RGB(160,160,160));
 	
 	//Wheels
-	lcdscherm->fillRect(x - 10 - width, 175, width, 15, RGB(0,0,0)); //left front
-	lcdscherm->fillRect(x - 10 - width, 205, width, 15, RGB(0,0,0)); //left rear
-	lcdscherm->fillRect(x + 20 - width, 175, width, 15, RGB(0,0,0)); //right front
-	lcdscherm->fillRect(x + 20 - width, 205, width, 15, RGB(0,0,0)); //right rear
+	lcdscherm->fillRect(x - 10 - width, y + 10, width, 15, RGB(0,0,0)); //left front
+	lcdscherm->fillRect(x - 10 - width, y + 40, width, 15, RGB(0,0,0)); //left rear
+	lcdscherm->fillRect(x + 20 - width, y + 10, width, 15, RGB(0,0,0)); //right front
+	lcdscherm->fillRect(x + 20 - width, y + 40, width, 15, RGB(0,0,0)); //right rear
 	
 	//Road
-	lcdscherm->fillRect(x - 20 - width, 175, width, 15, RGB(160,160,160));
-	lcdscherm->fillRect(x - 20 - width, 205, width, 15, RGB(160,160,160));
-	lcdscherm->fillRect(x - 20 - width, 225, width, 10, RGB(160,160,160));
+	lcdscherm->fillRect(x - 20 - width, y + 10, width, 15, RGB(160,160,160));
+	lcdscherm->fillRect(x - 20 - width, y + 40, width, 15, RGB(160,160,160));
+	lcdscherm->fillRect(x - 20 - width, y + 60, width, 10, RGB(160,160,160));
 }

@@ -34,6 +34,7 @@ class Car
 		MI0283QT9 * lcdscherm;
 		ArduinoNunchuk nunchuk;
 		uint16_t x;
+		uint16_t y;
 	
 		/**
 		 * Keeps the car going straight
