@@ -29,9 +29,7 @@ void Car::Init(MI0283QT9 *lcd, ArduinoNunchuk nunchuck)
 	lcdscherm->fillRect(x + 10, y + 40, 10, 15, RGB(0,0,0)); //right rear
 }
 
-
 void Car::Reverse(){
-	//create value for default en reverse
 	if (dir)
 	{
 		dir = 0;
@@ -43,7 +41,6 @@ void Car::Reverse(){
 void Car::Refresh()
 {
 	nunchuk.update();
-   //checks the nunchuk value and react on the car
 	if (nunchuk.analogX < 30)
 	{
 		if (dir){
@@ -63,28 +60,28 @@ void Car::Refresh()
 	}
 	else if (nunchuk.analogX > 50 && nunchuk.analogX <= 70)
 	{
-			if (dir){
-				Left(6);
-			}  else {
-				Right(6);
-			}
+		if (dir){
+			Left(6);
+		}  else {
+			Right(6);
+		}
 	}
 	else if (nunchuk.analogX > 70 && nunchuk.analogX <= 90)
 	{
-			if (dir){
-				Left(4);
-			}  else {
-				Right(4);
-			}
+		if (dir){
+			Left(4);
+		}  else {
+			Right(4);
+		}
 	}
 	else if (nunchuk.analogX > 90 && nunchuk.analogX <= 100)
 	{
-			if (dir){
-				Left(2);
-			}  else {
-				Right(2);
-			}
-			
+		if (dir){
+			Left(2);
+		}  else {
+			Right(2);
+		}
+		
 	}
 	else if (nunchuk.analogX > 100 && nunchuk.analogX <= 150)
 	{
@@ -168,8 +165,10 @@ void Car::Straight()
 void Car::Down(){
 	//Draw Road
 	lcdscherm->fillRect(x - 20, y, 40, 120, RGB(160,160,160));
-	// Moves the car 40pix down
+	
+	// Moves the car 40 pixels down
 	y += 40;
+	
 	//Draw frame
 	lcdscherm->fillRect(x - 10, y, 20, 60, RGB(0,0,255));
 	
@@ -187,15 +186,15 @@ void Car::Down(){
 void Car::Up(){
 	//Draw Road
 	lcdscherm->fillRect(x - 20, y - 40, 40, 120, RGB(160,160,160));
-    // Moves the car 40pix up
+	
+	// Moves the car 40 pixels up
 	y -= 40;
+	
 	//Draw frame
 	lcdscherm->fillRect(x - 10, y, 20, 60, RGB(0,0,255));
 	
 	//Draw spoiler
 	lcdscherm->fillRect(x - 20, y + 60, 40, 10, RGB(0,0,255));
-	
-
 	
 	//Draw wheels
 	lcdscherm->fillRect(x - 20, y + 10, 10, 15, RGB(0,0,0)); //left front

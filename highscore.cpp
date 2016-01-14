@@ -1,5 +1,3 @@
-// highscore.cpp
-
 #include "highscore.h"
 #include <string.h>
 #include "EEPROMAnything.h"

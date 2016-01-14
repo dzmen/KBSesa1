@@ -1,5 +1,3 @@
-// obstacles.cpp
-
 #include "Obstacles.h"
 
 #include <Arduino.h>
@@ -11,7 +9,6 @@
 
 void Obstacles::Init(MI0283QT9 * lcd)
 {
-	// save lcd 
 	lcdscherm = lcd;
 }
 
@@ -27,20 +24,20 @@ void Obstacles::Createobject(uint8_t arrayid, uint8_t pos)
 	{
 		case 0:
 		// steering object
-			ObstacleSteering(arrayid);
-			break;
+		ObstacleSteering(arrayid);
+		break;
 		case 1:
 		// block object
-			ObstacleBlock(arrayid);
-			break;
+		ObstacleBlock(arrayid);
+		break;
 		case 2:
 		// down object
-			ObstacleSlow(arrayid);
-			break;
+		ObstacleSlow(arrayid);
+		break;
 		case 3:
 		// up object
-			ObstacleFast(arrayid);
-			break;
+		ObstacleFast(arrayid);
+		break;
 	}
 }
 
@@ -54,26 +51,25 @@ void Obstacles::Next(uint8_t arrayid)
 		switch (objecten[arrayid].type)
 		{
 			case 0:
-				ObstacleSteering(arrayid);
-				break;
+			ObstacleSteering(arrayid);
+			break;
 			case 1:
-				ObstacleBlock(arrayid);
-				break;
+			ObstacleBlock(arrayid);
+			break;
 			case 2:
-				ObstacleSlow(arrayid);
-				break;
+			ObstacleSlow(arrayid);
+			break;
 			case 3:
-				ObstacleFast(arrayid);
-				break;
+			ObstacleFast(arrayid);
+			break;
 		}
-	}else{
+		}else{
 		objecten[arrayid].active = 0;
 	}
 }
 
 uint8_t Obstacles::IsActive(uint8_t arrayid){
 	return objecten[arrayid].active;
-	
 }
 
 uint8_t Obstacles::GetRoad(uint8_t arrayid){
@@ -99,25 +95,25 @@ void Obstacles::RemoveObstacle(uint8_t arrayid)
 	switch (objecten[arrayid].type)
 	{
 		case 0:   // steering
-			xobject -= 48;
-			obstacleX = 23;
-			obstacleY = 11;
-			break;
+		xobject -= 48;
+		obstacleX = 23;
+		obstacleY = 11;
+		break;
 		case 1: // block
-			xobject -= 40;
-			obstacleX = 15;
-			obstacleY = 15;
-			break;
+		xobject -= 40;
+		obstacleX = 15;
+		obstacleY = 15;
+		break;
 		case 2: // slow
-			xobject -=51;
-			obstacleX = 22;
-			obstacleY = 21;
-			break;
+		xobject -=51;
+		obstacleX = 22;
+		obstacleY = 21;
+		break;
 		case 3: // fast
-			xobject -=51;
-			obstacleX = 22;
-			obstacleY = 21;
-			break;
+		xobject -=51;
+		obstacleX = 22;
+		obstacleY = 21;
+		break;
 	}
 	uint16_t yobject = objecten[arrayid].ypos * 40 + 10;
 	lcdscherm->fillRect(xobject, yobject, obstacleX, obstacleY, GRAY);
@@ -125,7 +121,7 @@ void Obstacles::RemoveObstacle(uint8_t arrayid)
 
 void Obstacles::ObstacleSlow(uint8_t arrayid)
 {
- // draw obstacle down
+	// draw obstacle down
 	uint16_t xobject = objecten[arrayid].roadpos * 10 + 20 + objecten[arrayid].xpos;
 	uint16_t yobject = objecten[arrayid].ypos * 40 + 10;
 	lcdscherm->fillTriangle(xobject-50,yobject+10,xobject-30,yobject+10,xobject-40,yobject+20,YELLOW);
@@ -134,7 +130,7 @@ void Obstacles::ObstacleSlow(uint8_t arrayid)
 
 void Obstacles::ObstacleFast(uint8_t arrayid)
 {
- // draw obstacle up
+	// draw obstacle up
 	uint16_t xobject = objecten[arrayid].roadpos * 10 + 20 + objecten[arrayid].xpos;
 	uint16_t yobject = objecten[arrayid].ypos * 40 + 10;
 	lcdscherm->fillTriangle(xobject-50,yobject+10,xobject-30,yobject+10,xobject-40,yobject,YELLOW);
@@ -143,7 +139,7 @@ void Obstacles::ObstacleFast(uint8_t arrayid)
 
 void Obstacles::ObstacleSteering(uint8_t arrayid)
 {
- // draw obstacle steering
+	// draw obstacle steering
 	uint16_t xobject = objecten[arrayid].roadpos * 10 + 20 + objecten[arrayid].xpos;
 	uint16_t yobject = objecten[arrayid].ypos * 40 + 10;
 	lcdscherm->fillTriangle(xobject-40,yobject,xobject-47,yobject+5,xobject-40,yobject+10,YELLOW);
@@ -153,7 +149,7 @@ void Obstacles::ObstacleSteering(uint8_t arrayid)
 
 void Obstacles::ObstacleBlock(uint8_t arrayid)
 {
- // draw obstacle block
+	// draw obstacle block
 	uint16_t xobject = objecten[arrayid].roadpos * 10 + 20 + objecten[arrayid].xpos;
 	uint16_t yobject = objecten[arrayid].ypos * 40 + 10;
 	lcdscherm->fillRect(xobject-40,yobject,15,15,YELLOW);

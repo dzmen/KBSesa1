@@ -1,5 +1,3 @@
-// selector.cpp
-
 #include "selector.h"
 #include "button.h"
 
@@ -21,7 +19,7 @@ Selector::Selector(MI0283QT9 *lcd_p, uint16_t x_in, uint16_t y_in, uint8_t empty
 		alfhabet = 'a';
 	}
 	
-	up_p = new Button(x,y,"+");	
+	up_p = new Button(x,y,"+");
 	up_p->drawButton(lcd_p);
 	
 	drawChar(lcd_p);
@@ -49,7 +47,7 @@ void Selector::add()
 		else
 		{
 			alfhabet = 0x61;
-		}		
+		}
 	}
 	else
 	{

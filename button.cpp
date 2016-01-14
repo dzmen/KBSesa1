@@ -16,10 +16,10 @@ Button::Button(uint16_t xin, uint8_t yin, char* text)
 	height = 40;
 	
 	//convert a char to string
-	strcpy(text_string, text);	
+	strcpy(text_string, text);
 	
 	//calculate the width
-	width = strlen(text_string) * 24 + 20;		
+	width = strlen(text_string) * 24 + 20;
 }
 
 Button::Button(uint8_t yin, char* text)
@@ -28,13 +28,13 @@ Button::Button(uint8_t yin, char* text)
 	height = 40;
 	
 	//convert a char to string
-	strcpy(text_string, text);	
+	strcpy(text_string, text);
 	
 	//calculate the width
-	width = strlen(text_string) * 24 + 20;	
+	width = strlen(text_string) * 24 + 20;
 	
 	//calculate the x coordinate so its in the center
-	x = (320 - width) / 2;		
+	x = (320 - width) / 2;
 }
 
 void Button::drawButton(MI0283QT9 *lcd_p)
@@ -49,7 +49,7 @@ void Button::drawButton(MI0283QT9 *lcd_p)
 void Button::removeButton(MI0283QT9 *lcd_p)
 {
 	//draw the background of the button
-	lcd_p->fillRoundRect(x , y - 10, width, height, 10, LIGHT_BLUE);	
+	lcd_p->fillRoundRect(x , y - 10, width, height, 10, LIGHT_BLUE);
 }
 
 uint8_t Button::isPressed(uint16_t xin, uint8_t yin)
@@ -57,13 +57,13 @@ uint8_t Button::isPressed(uint16_t xin, uint8_t yin)
 	uint16_t xend = x + width;
 	uint8_t yend = y - 10 + height;
 	
-	//check if the x and y vars are between the x and y range of the button	
+	//check if the x and y vars are between the x and y range of the button
 	if ((yin >= y - 10 && yin <= yend) && (xin >= x && xin <= xend))
 	{
-		return 1;		
-	} 
+		return 1;
+	}
 	else
 	{
 		return 0;
-	}	
+	}
 }

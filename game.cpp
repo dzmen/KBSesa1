@@ -1,5 +1,3 @@
-// game.cpp
-
 #include "game.h"
 #include <MI0283QT9.h>
 #include "button.h"
@@ -22,7 +20,7 @@ volatile uint32_t seconds = 0;
 
 ISR(TIMER2_OVF_vect) {
 	teller++;
-	if ( teller >= 260)
+	if ( teller >= 60)
 	{
 		seconds++;
 		teller = 0;
@@ -34,32 +32,38 @@ void Game::init(MI0283QT9 lcd_p)
 	lcd = &lcd_p;
 	touch_x = 0;
 	touch_y = 0;
-	screen_brightness = 50;
-	lcd->led(screen_brightness);
 	main_screen = 1;
 	start_game = 0;
 	highcore_screen = 0;
 	settings_screen = 0;
 	help_screen = 0;
-	TCCR2B |= (1 << CS22) | (1<<CS20);
+	
+	//Set screen brightness when enable Arduino
+	screen_brightness = 50;
+	lcd->led(screen_brightness);
+	
+	//Enables timer 2
+	TCCR2B |= (1 << CS22) | (1<<CS21)| (1<<CS20);
 	TIMSK2 |= (1<<TOIE2);
 	TCNT2 = 0;
 	sei();
+	
+	//Initialize the Highscore class
 	game_highscores.init();
 }
-	
+
 
 void Game::run()
 {
 	
 	/**
-	* Run the main menu 
-	*/	
+	* Run the main menu
+	*/
 	if(main_screen)
 	{
 		removeLastTouch();
 		
-		lcd->fillScreen(LIGHT_BLUE);	
+		lcd->fillScreen(LIGHT_BLUE);
 		Button start = Button(30, "Start");
 		Button highscores = Button(85, "Highscores");
 		Button settings = Button(140, "Settings");
@@ -68,10 +72,10 @@ void Game::run()
 		start.drawButton(lcd);
 		highscores.drawButton(lcd);
 		settings.drawButton(lcd);
-		help.drawButton(lcd);	
-				
+		help.drawButton(lcd);
+		
 		while(main_screen)
-		{			
+		{
 			updateTouch();
 			
 			if (start.isPressed(touch_x, touch_y))
@@ -117,21 +121,27 @@ void Game::run()
 				main_screen = 0;
 				help_screen = 1;
 				
-			}			
+			}
 		}
 	}
 	/**
 	* Run the game
-	*/	
+	*/
 	else if(start_game)
-	{		
+	{
 		uint8_t gameover = 0;
 		seconds = 0;
 		removeLastTouch();
+		
+		//Initialize ArduinoNunchuk
 		nunchuk = ArduinoNunchuk();
 		nunchuk.init();
 		nunchuk.update();
+		
+		//Set randomseed so we get random values
 		randomSeed(nunchuk.accelX + nunchuk.accelY + nunchuk.accelZ);
+		
+		//Initialize gamefield and start the game 
 		field.Init(lcd, nunchuk);
 		field.StartRoad();
 		field.SetTimer(0);
@@ -139,15 +149,21 @@ void Game::run()
 		
 		while(start_game)
 		{
+			//Generate a game field
 			field.Generate();
+			
+			//Set timer (score) in game field
 			field.SetTimer(seconds);
 
+			//Check if player is still alive
 			if (field.CheckGame())
 			{
 				start_game = 0;
 				quittime = seconds;
 				gameover = 1;
 			}
+			
+			//Check if player wants a break
 			nunchuk.update();
 			if (nunchuk.zButton)
 			{
@@ -187,6 +203,8 @@ void Game::run()
 				lcd->fillRect(pos * 10 + 150, 40, 320 - (pos * 10 + 150), 40, GREEN);
 			}
 		}
+		
+		//If game is over, check highscore
 		if (game_highscores.checkIfHighscore(quittime))
 		{
 			lcd->fillScreen(LIGHT_BLUE);
@@ -204,6 +222,7 @@ void Game::run()
 			Button add = Button(200, "Done");
 			add.drawButton(lcd);
 			
+			//Read player input while they are in the gameover highscore save screen
 			while(gameover)
 			{
 				updateTouch();
@@ -299,13 +318,14 @@ void Game::run()
 	}
 	/**
 	* Run the highscore screen
-	*/	
+	*/
 	else if(highcore_screen)
 	{
 		
 		Button back = Button(200, "back");
 		back.drawButton(lcd);
 		
+		//Get highscores from EEPROM
 		highscore number1 = game_highscores.getHighscore(1);
 		highscore number2 = game_highscores.getHighscore(2);
 		highscore number3 = game_highscores.getHighscore(3);
@@ -334,34 +354,35 @@ void Game::run()
 		{
 			lcd->drawText(20,20,"No highscores yet.",WHITE,LIGHT_BLUE, 2);
 		}
-								
+		
 		while(highcore_screen)
 		{
 			updateTouch();
 			
 			if (back.isPressed(touch_x, touch_y))
-			{						
+			{
 				removeLastTouch();
 				highcore_screen = 0;
-				main_screen = 1;			
+				main_screen = 1;
 			}
 		}
 	}
 	/**
 	* Run the settings screen
-	*/	
+	*/
 	else if(settings_screen)
 	{
 		Button back = Button(200, "back");
 		back.drawButton(lcd);
 		
+		//Highscore delete option
 		lcd->drawText(20,20,"Highscores: ",WHITE,LIGHT_BLUE,2);
 		
 		highscore copy_of_first_highscore = game_highscores.getHighscore(1);
 		Button delete_highscores = Button(20,60,"delete");
 		
 		if (copy_of_first_highscore.score)
-		{			
+		{
 			delete_highscores.drawButton(lcd);
 		}
 		else
@@ -369,7 +390,7 @@ void Game::run()
 			lcd->drawText(20,60,"No highscores.",WHITE,LIGHT_BLUE,2);
 		}
 		
-		
+		//Screen brightness options
 		lcd->drawText(20,100,"Screen brightness: ",WHITE,LIGHT_BLUE,2);
 		
 		Button niv_1 = Button(20,140,"1");
@@ -383,7 +404,7 @@ void Game::run()
 		
 		Button niv_4 = Button(170,140,"4");
 		niv_4.drawButton(lcd);
-				
+		
 		while(settings_screen)
 		{
 			updateTouch();
@@ -399,16 +420,16 @@ void Game::run()
 				}
 			}
 			if (niv_1.isPressed(touch_x,touch_y))
-			{				
+			{
 				screen_brightness  = 25;
 				lcd->led(screen_brightness);
-				removeLastTouch();				
+				removeLastTouch();
 			}
 			if (niv_2.isPressed(touch_x,touch_y))
 			{
 				screen_brightness = 50;
 				lcd->led(screen_brightness);
-				removeLastTouch();		
+				removeLastTouch();
 			}
 			if (niv_3.isPressed(touch_x,touch_y))
 			{
@@ -421,19 +442,19 @@ void Game::run()
 				screen_brightness = 100;
 				lcd->led(screen_brightness);
 				removeLastTouch();
-			}			
+			}
 			if (back.isPressed(touch_x, touch_y))
 			{
 				removeLastTouch();
 				settings_screen = 0;
 				main_screen = 1;
-			}	
+			}
 			
 		}
 	}
 	/**
 	* Run the help screen
-	*/	
+	*/
 	else if(help_screen)
 	{
 		uint8_t help1 = 1;
@@ -442,6 +463,7 @@ void Game::run()
 		Button back = Button(200, "back");
 		back.drawButton(lcd);
 		
+		//Create page 1 of the help screen
 		if (help1)
 		{
 			lcd->fillRect(0, 0, 320, 180, LIGHT_BLUE);
@@ -489,6 +511,7 @@ void Game::run()
 			}
 		}
 		
+		//Create page 2 of the help screen
 		if (help2)
 		{
 			lcd->fillRect(0, 0, 320, 180, LIGHT_BLUE);

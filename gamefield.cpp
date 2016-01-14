@@ -26,13 +26,19 @@ void Gamefield::Init(MI0283QT9 * lcd, ArduinoNunchuk nunchuck)
 
 void Gamefield::StartRoad()
 {
-	lcdscherm->fillRect(0, 0, 100, 240, GREEN);
-	lcdscherm->fillRect(90, 0, 10, 240, ORANGE);
-	lcdscherm->fillRect(100, 0, 120, 240, GRAY);
-	lcdscherm->fillRect(220, 0, 10, 240, ORANGE);
-	lcdscherm->fillRect(230, 0, 90, 240, GREEN);
+	lcdscherm->fillRect(0, 0, 100, 240, GREEN);		//The left grass
+	lcdscherm->fillRect(90, 0, 10, 240, ORANGE);	//The left orange line
+	lcdscherm->fillRect(100, 0, 120, 240, GRAY);	//The gray road
+	lcdscherm->fillRect(220, 0, 10, 240, ORANGE);	//The right orange line
+	lcdscherm->fillRect(230, 0, 90, 240, GREEN);	//The right grass
+	
+	//Generate an obstacle after 10 seconds
 	generateobstacle = 10;
+	
+	//Count how many obstacles are in the field
 	countobstacles = 0;
+	
+	//The number of which road pieces need to be check if they are offroad
 	nummer = 4;
 	gameover = 0;
 }
@@ -40,14 +46,17 @@ void Gamefield::StartRoad()
 void Gamefield::MoveRoad(uint8_t hpos, uint8_t dir)
 {
 	uint8_t wlength = 10;
+
 	if(dir){
+		//Move the road to the right
 		int wpos = pos[hpos];
 		lcdscherm->fillRect(wpos * wlength + wlength, hpos * 40, wlength, 40, GREEN);
 		lcdscherm->fillRect(wpos * wlength + wlength + 10, hpos * 40, 10, 40, ORANGE);
 		lcdscherm->fillRect(wpos * wlength + wlength + 130, hpos * 40, wlength, 40, GRAY);
 		lcdscherm->fillRect(wpos * wlength + wlength + 140, hpos * 40, 10, 40, ORANGE);
 		pos[hpos]++;
-		}else{
+	}else{
+		//Move the road to the left
 		int wpos = pos[hpos];
 		lcdscherm->fillRect(wpos * wlength , hpos * 40, 10, 40, ORANGE);
 		lcdscherm->fillRect(wpos * wlength + 10, hpos * 40, 10, 40, GRAY);
@@ -64,12 +73,15 @@ uint8_t * Gamefield::GetPos()
 
 void Gamefield::Generate()
 {
+	//Check if the top of the road is on the generated position
 	if (newpos == 100 || newpos == pos[0])
 	{
 		newpos = random(1, 15);
 	}
 	uint8_t vorigepos = 100;
 	uint8_t i = 0;
+	
+	//Loop through all the road pieces
 	for (i = 0; i < 6; i++)
 	{
 		if (!gameover)
@@ -95,6 +107,8 @@ void Gamefield::Generate()
 		}
 	}
 	CheckGame();
+	
+	//Move the obstacle if there is an obstacle and remove it when it is outside lcd
 	if(i == 6 && countobstacles > 0){
 		i = 0;
 		obsta.Next(0);
@@ -103,6 +117,8 @@ void Gamefield::Generate()
 			countobstacles--;
 		}
 	}
+	
+	//Generate an obstacle when it is time and there are no other obstacles on the road
 	if (timer == generateobstacle && countobstacles < totalobstacles)
 	{
 		obsta.Createobject(countobstacles, pos[0]);
@@ -141,6 +157,7 @@ void Gamefield::SetHS(uint32_t score)
 uint8_t Gamefield::CheckGame()
 {
 	uint8_t gameover = 0;
+	//If there is an obstacle on the road, then check if player hits offroad or block obstacle. Else only check offroad
 	if (countobstacles > 0)
 	{
 		(offroad(game_car.GetPosX(), GetPos())||Working(0))?gameover=1:gameover=0;
@@ -155,42 +172,46 @@ uint8_t Gamefield::Working(uint8_t arrayid){
 	uint16_t obstacleY = 0;
 	uint16_t xobject = obsta.GetRoad(arrayid) * 10 + 20 + obsta.GetXpos(arrayid);
 	uint16_t yobject = obsta.GetYpos(arrayid) * 40 + 10;
+	
+	//Select the touch zone values of the object
 	switch (obsta.GetType(arrayid))
 	{
 		case 0:   // steering
-			xobject -= 48;
-			obstacleX = 23;
-			obstacleY = 11;
-			break;
+		xobject -= 48;
+		obstacleX = 23;
+		obstacleY = 11;
+		break;
 		case 1: // block
-			xobject -= 40;
-			obstacleX = 15;
-			obstacleY = 15;
-			break;
+		xobject -= 40;
+		obstacleX = 15;
+		obstacleY = 15;
+		break;
 		case 2: // slow
-			xobject -=51;
-			obstacleX = 22;
-			obstacleY = 21;
-			break;
+		xobject -=51;
+		obstacleX = 22;
+		obstacleY = 21;
+		break;
 		case 3: // fast
-			xobject -=51;
-			obstacleX = 22;
-			obstacleY = 21;
-			break;
+		xobject -=51;
+		obstacleX = 22;
+		obstacleY = 21;
+		break;
 	}
-  if ((xobject + obstacleX > game_car.GetPosX() - 20) && (xobject < game_car.GetPosX() + 20) && (yobject + obstacleY < game_car.GetPosY() +70) && (yobject > game_car.GetPosY()))
-  {
-	  switch(obsta.GetType(arrayid)){
-		case 0: //steering
+	
+	//Check if player hits an obstacle
+	if ((xobject + obstacleX > game_car.GetPosX() - 20) && (xobject < game_car.GetPosX() + 20) && (yobject + obstacleY < game_car.GetPosY() +70) && (yobject > game_car.GetPosY()))
+	{
+		switch(obsta.GetType(arrayid)){
+			case 0: //steering
 			game_car.Reverse();
 			obsta.RemoveObstacle(arrayid);
 			countobstacles--;
 			return 0;
 			break;
-		case 1: //block
+			case 1: //block
 			return 1;
 			break;
-		case 2://down
+			case 2://down
 			obsta.RemoveObstacle(arrayid);
 			if (nummer != 4)
 			{
@@ -199,8 +220,8 @@ uint8_t Gamefield::Working(uint8_t arrayid){
 			}
 			countobstacles--;
 			return 0;
-		    break;
-		case 3://up
+			break;
+			case 3://up
 			obsta.RemoveObstacle(arrayid);
 			if (nummer != 1)
 			{
@@ -210,20 +231,25 @@ uint8_t Gamefield::Working(uint8_t arrayid){
 			countobstacles--;
 			return 0;
 			break;
-	  }
-	}else{
+		}
+		}else{
 		return 0;
 	}
 }
 
 uint8_t Gamefield::offroad(uint16_t carpos, uint8_t * roadpos)
 {
+	//Calculate the minimal road size
 	uint8_t roadmin = ((roadpos[nummer]>roadpos[nummer+1])?roadpos[nummer]:roadpos[nummer+1]);
+	
+	//Calculate the maximal road size
 	uint8_t roadmax = ((roadpos[nummer]>roadpos[nummer+1])?roadpos[nummer+1]:roadpos[nummer]);
+	
+	//Check if car is offroad
 	if ((roadmin * 10 + 20) >= (carpos - 20) || (roadmax * 10 + 140) <= (carpos + 20))
 	{
 		return 1;
-	}else{
+		}else{
 		return 0;
 	}
 }
