@@ -31,10 +31,22 @@ class Car
 		uint16_t GetPosX();
 		uint16_t GetPosY();
 		
+		/*
+		Moves the car up
+		*/
 		void Up();
+
+	    /*
+		Moves the car down
+		*/
 		void Down();
-		void Reverse();
 		
+		
+	    /*
+		Reverse the value's of the car movement
+		*/
+		void Reverse();
+	
 	private:
 		MI0283QT9 * lcdscherm;
 		ArduinoNunchuk nunchuk;

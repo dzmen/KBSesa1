@@ -31,6 +31,7 @@ void Car::Init(MI0283QT9 *lcd, ArduinoNunchuk nunchuck)
 
 
 void Car::Reverse(){
+	//create value for default en reverse
 	if (dir)
 	{
 		dir = 0;
@@ -42,7 +43,7 @@ void Car::Reverse(){
 void Car::Refresh()
 {
 	nunchuk.update();
-   
+   //checks the nunchuk value and react on the car
 	if (nunchuk.analogX < 30)
 	{
 		if (dir){
@@ -165,8 +166,9 @@ void Car::Straight()
 }
 
 void Car::Down(){
-	//Road
+	//Draw Road
 	lcdscherm->fillRect(x - 20, y, 40, 120, RGB(160,160,160));
+	// Moves the car 40pix down
 	y += 40;
 	//Draw frame
 	lcdscherm->fillRect(x - 10, y, 20, 60, RGB(0,0,255));
@@ -183,8 +185,9 @@ void Car::Down(){
 }
 
 void Car::Up(){
-	//Road
+	//Draw Road
 	lcdscherm->fillRect(x - 20, y - 40, 40, 120, RGB(160,160,160));
+    // Moves the car 40pix up
 	y -= 40;
 	//Draw frame
 	lcdscherm->fillRect(x - 10, y, 20, 60, RGB(0,0,255));
