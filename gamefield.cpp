@@ -186,12 +186,12 @@ uint8_t Gamefield::Working(uint8_t arrayid){
 		obstacleX = 15;
 		obstacleY = 15;
 		break;
-		case 2: // slow
+		case 2: // down
 		xobject -=51;
 		obstacleX = 22;
 		obstacleY = 21;
 		break;
-		case 3: // fast
+		case 3: // up
 		xobject -=51;
 		obstacleX = 22;
 		obstacleY = 21;
