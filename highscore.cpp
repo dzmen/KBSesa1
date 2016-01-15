@@ -1,6 +1,6 @@
 #include "highscore.h"
 #include <string.h>
-#include "EEPROMAnything.h"
+#include <avr/eeprom.h>
 
 void Highscore::init()
 {
@@ -27,7 +27,7 @@ void Highscore::resetHighscores()
 
 void Highscore::refreshLocalHighscores()
 {
-	EEPROM_readAnything(adress_1,eeprom_array);
+	eeprom_read_block((void*)&eeprom_array,(void*)adress_1,sizeof(eeprom_array));
 	highscore_1 = eeprom_array[0];
 	highscore_2 = eeprom_array[1];
 	highscore_3 = eeprom_array[2];
@@ -37,7 +37,7 @@ void Highscore::saveToEeprom()
 	eeprom_array[0] = highscore_1;
 	eeprom_array[1] = highscore_2;
 	eeprom_array[2] = highscore_3;
-	EEPROM_writeAnything(adress_1,eeprom_array);
+	eeprom_write_block((void*)&eeprom_array,(void*)adress_1,sizeof(eeprom_array));
 }
 
 highscore Highscore::getHighscore(uint8_t highscore_number)
