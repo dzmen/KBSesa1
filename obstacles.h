@@ -6,9 +6,9 @@ class Obstacles{
 	public:
 	
 	/**
-	* Constructs a Game object
+	* Initialize the obstacle object
 	*
-	* @param lcd_p A pointer to a lcd to render the game elements on
+	* @param lcd_p A pointer to a lcd to render the obstacles on
 	*/
 	void Init(MI0283QT9 * lcd);
 	
